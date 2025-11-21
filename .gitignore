@@ -23,11 +23,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # Dependency directories
-node_modules/
+node_modules
 
 # Cache
-.cache/
-.tmp/
+node_modules\.cache
+.tmp\
 
 
 /.vs
