@@ -5,7 +5,7 @@ import { globalURL } from "./globalEnv";
 export async function getDistrictList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/district?state=27&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/district?state=27&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -29,7 +29,7 @@ export async function getTalukaList(lang: string, districtId: string, bearerToke
   }
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Taluka?distid=${districtId}&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/Taluka?distid=${districtId}&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -53,7 +53,7 @@ export async function getVillageList(lang: String, talukaId: string, bearerToken
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Villege?taluka=${talukaId}&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/Villege?taluka=${talukaId}&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -72,7 +72,7 @@ export async function getVillageList(lang: String, talukaId: string, bearerToken
 export async function getTypesOfCourseListWithparam(bearerToken: string, SwadharOrHostel: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/CourseType?IsSwadharorHostel=${SwadharOrHostel}`,
+    url: `${globalURL}fv_master-service/api/CourseType?IsSwadharorHostel=${SwadharOrHostel}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -119,7 +119,7 @@ export async function getHostelList(districtId: string, talukaId: string, bearer
 export async function getCasteCategoryList(bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/CasteCategory`,
+    url: `${globalURL}fv_master-service/api/CasteCategory`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -137,7 +137,7 @@ export async function getCasteCategoryList(bearerToken: string): Promise<string>
 export async function getGenderList(bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/gender`,
+    url: `${globalURL}fv_master-service/api/gender`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -154,7 +154,7 @@ export async function getGenderList(bearerToken: string): Promise<string> {
 export async function getCasteList(casteCategory: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/caste?castecategoryId=${casteCategory}`,
+    url: `${globalURL}fv_master-service/api/caste?castecategoryId=${casteCategory}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -176,7 +176,7 @@ export async function getCasteList(casteCategory: string, bearerToken: string): 
 export async function getMaritalStatusList(bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/MarritalStatus`,
+    url: `${globalURL}fv_master-service/api/MarritalStatus`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -194,7 +194,7 @@ export async function getMaritalStatusList(bearerToken: string): Promise<string>
 export async function getIssuingAuthorityList(bearerToken: string, drpType: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/IssuingAuthority?drpType=${drpType}`,
+    url: `${globalURL}fv_master-service/api/IssuingAuthority?drpType=${drpType}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -212,7 +212,7 @@ export async function getIssuingAuthorityList(bearerToken: string, drpType: stri
 export async function getAppMenu(bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_user-service/api/menu`,
+    url: `${globalURL}fv_user-service/api/menu`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -270,7 +270,7 @@ export async function encryptString(plainText: string): Promise<string> {
 export async function getStateList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/state?lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/state?lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -290,7 +290,7 @@ export async function getStateList(lang: string, bearerToken: string): Promise<s
 export async function getStandardList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Standards`,
+    url: `${globalURL}fv_master-service/api/Standards`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -308,7 +308,7 @@ export async function getStandardList(lang: string, bearerToken: string): Promis
 export async function getCategoryList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Category`,
+    url: `${globalURL}fv_master-service/api/Category`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -326,7 +326,7 @@ export async function getCategoryList(lang: string, bearerToken: string): Promis
 export async function getStdGenderList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/GenderList`,
+    url: `${globalURL}fv_master-service/api/GenderList`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -344,7 +344,7 @@ export async function getStdGenderList(lang: string, bearerToken: string): Promi
 export async function getRelationshipList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Relationships`,
+    url: `${globalURL}fv_master-service/api/Relationships`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -362,7 +362,7 @@ export async function getRelationshipList(lang: string, bearerToken: string): Pr
 export async function getLast12YearList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/GetLast12YearsList`,
+    url: `${globalURL}fv_master-service/api/GetLast12YearsList`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -380,7 +380,7 @@ export async function getLast12YearList(lang: string, bearerToken: string): Prom
 export async function getAcadmicYearList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/AcademicYear`,
+    url: `${globalURL}fv_master-service/api/AcademicYear`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -399,7 +399,7 @@ export async function getAcadmicYearList(lang: string, bearerToken: string): Pro
 export async function getStuCasteList(lang: string,bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Caste?langId=${lang}`,
+    url: `${globalURL}fv_master-service/api/Caste?langId=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -419,7 +419,7 @@ export async function getStuSubCasteList(lang: string, casteId: number, bearerTo
   }
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/SubCaste?castCatId=${casteId}&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/SubCaste?castCatId=${casteId}&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -447,7 +447,7 @@ try {
 export async function getStuDistrictList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/District?lang=1`,
+    url: `${globalURL}fv_master-service/api/District?lang=1`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -470,7 +470,7 @@ export async function getStuTalukaList(lang: string, districtId: string, bearerT
   }
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Taluka?distid=${districtId}&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/Taluka?distid=${districtId}&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -493,7 +493,7 @@ export async function getStuVillageList(lang: String, talukaId: string, bearerTo
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Villege?taluka=${talukaId}&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/Villege?taluka=${talukaId}&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -512,7 +512,7 @@ export async function getStuVillageList(lang: String, talukaId: string, bearerTo
 export async function getSchoolBodyRoleList(lang: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/SchoolBodyRoles`,
+    url: `${globalURL}fv_master-service/api/SchoolBodyRoles`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -551,7 +551,7 @@ export async function getAdmissiontype(bearerToken: string): Promise<string> {
 export async function getAdmissionyear(bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/AdmissionYear`,
+    url: `${globalURL}fv_master-service/api/AdmissionYear`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -569,7 +569,7 @@ export async function geteducationMode(bearerToken: string): Promise<string> {
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/EducationMode`,
+    url: `${globalURL}fv_master-service/api/EducationMode`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -588,7 +588,7 @@ export async function geteducationMode(bearerToken: string): Promise<string> {
 export async function getDistrictListByStateId(lang: string, stateId: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/district?state=${stateId}&lang=${lang}`,
+    url: `${globalURL}fv_master-service/api/district?state=${stateId}&lang=${lang}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -608,7 +608,7 @@ export async function getDistrictListByStateId(lang: string, stateId: string, be
 export async function getStream(intID: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Stream?intID=${intID}`,
+    url: `${globalURL}fv_master-service/api/Stream?intID=${intID}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -627,7 +627,7 @@ export async function getStream(intID: string, bearerToken: string): Promise<str
 export async function getCollegeOrScholl(stream: string, qualificationType: string, districtid: string, LangId: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/CollegeOrSchool?stream=${stream}&qualificationType=${qualificationType}&districtid=${districtid}&LangId=${LangId}`,
+    url: `${globalURL}fv_master-service/api/CollegeOrSchool?stream=${stream}&qualificationType=${qualificationType}&districtid=${districtid}&LangId=${LangId}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -647,7 +647,7 @@ export async function getCollegeOrScholl(stream: string, qualificationType: stri
 export async function getCollegeOrSchollForCurrent(stream: string, qualificationType: string, districtid: string, LangId: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/CollegeOrSchoolCurrent?stream=${stream}&qualificationType=${qualificationType}&districtid=${districtid}&LangId=${LangId}`,
+    url: `${globalURL}fv_master-service/api/CollegeOrSchoolCurrent?stream=${stream}&qualificationType=${qualificationType}&districtid=${districtid}&LangId=${LangId}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -666,7 +666,7 @@ export async function getCollegeOrSchollForCurrent(stream: string, qualification
 export async function getCourseList(collegeId: string, streamId: string, qualificationtypeId: string, langId: string, bearerToken: string): Promise<string> {
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Course?cold=${collegeId}&strmId=${streamId}&quaId=${qualificationtypeId}&langId=${langId}`,
+    url: `${globalURL}fv_master-service/api/Course?cold=${collegeId}&strmId=${streamId}&quaId=${qualificationtypeId}&langId=${langId}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -686,7 +686,7 @@ export async function getAdmissionType(bearerToken: string): Promise<string> {
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/admissiontype`,
+    url: `${globalURL}fv_master-service/api/admissiontype`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -727,7 +727,7 @@ export async function getCourseResult(caller: string, bearerToken: string): Prom
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/CourseResult?caller=${caller}`,
+    url: `${globalURL}fv_master-service/api/CourseResult?caller=${caller}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -747,7 +747,7 @@ export async function getCourseStatus(bearerToken: string): Promise<string> {
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/CourseStatus`,
+    url: `${globalURL}fv_master-service/api/CourseStatus`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -767,7 +767,7 @@ export async function getuniversity(colId: string, courseId: string, qualificati
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/university?courseId=${courseId}&colId=${colId}&qualificationLvl=${qualificationLvl}&LangId=${langId}`,
+    url: `${globalURL}fv_master-service/api/university?courseId=${courseId}&colId=${colId}&qualificationLvl=${qualificationLvl}&LangId=${langId}`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -846,7 +846,7 @@ export async function getAccountLogin(username: string, password: string): Promi
   }
   let config = {
     method: 'post',
-    url: `${globalURL}nm_user-service/api/Account/school-login`,
+    url: `${globalURL}fv_user-service/api/Account/farmer-login`,
     headers: {
       'Content-Type': 'application/json'
     },
@@ -864,7 +864,7 @@ export async function getAccountLogin(username: string, password: string): Promi
 export async function getAccountLogOut(bearerToken: string): Promise<boolean> {
   let config = {
     method: 'post',
-    url: `${globalURL}nm_user-service/api/Account/logout`,
+    url: `${globalURL}fv_user-service/api/Account/logout`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -912,7 +912,7 @@ export async function AcademicYear(bearerToken: string): Promise<string> {
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/AcademicYear`,
+    url: `${globalURL}fv_master-service/api/AcademicYear`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -934,7 +934,7 @@ export async function getaffiliationList(bearerToken: string): Promise<string> {
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/Affiliations`,
+    url: `${globalURL}fv_master-service/api/Affiliations`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
@@ -955,7 +955,7 @@ export async function getschooltypeList(bearerToken: string): Promise<string> {
 
   let config = {
     method: 'get',
-    url: `${globalURL}nm_master-service/api/schooltype`,
+    url: `${globalURL}fv_master-service/api/schooltype`,
     headers: {
       'Authorization': `Bearer ${bearerToken}`,
     },
