@@ -6,6 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTranslation } from "react-i18next";
 import { getAppMenu, getSubMenu } from "../../Services/commonDL"; 
 import { useSelector } from "react-redux";
+import { parseToken } from "../../Services/jwtDecode";
+import { RootState } from "../../store/index";
 
 interface MenuItem {
   menuId: number;
@@ -24,11 +26,21 @@ interface LeftPannelProps {
 const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-  const token = useSelector((state: any) => state.authenticate.token);
+  const token = useSelector((state: RootState) => state.authenticate.token);
   const location = useLocation();
   const { t } = useTranslation("App.Appliacation");
 
+    let roleId = 0;
   
+    if (token) {
+      try {
+        const decoded = parseToken(token);
+        roleId = decoded.RoleId;
+      } catch (err) {
+        console.error("Failed to decode token:", err);
+      }
+    }
+
   const menuAnimations = {
     menuItem: { hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } },
     subMenu: {
@@ -44,24 +56,33 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
     if (!token) return;
 
     try {
-      const menus = await getAppMenu(token, 1); 
+
+      
+      const menus = await getAppMenu(token, roleId);
 
       const menuWithSubmenus = await Promise.all(
         menus.map(async (m: any) => {
-          const sub = await getSubMenu(token, 1, m.menuId);
+          const sub = await getSubMenu(token, roleId, m.menuId);
 
           const mappedSubmenus = sub.map((s: any, index: number) => ({
-            menuId: index + 1,          
-            menuName: s.subMenu,        
-            navigation: s.navigation,   
-            Submenu: []                 
+            menuId: index + 1000,     
+            menuName: s.subMenu,
+            navigation: s.navigation,
+            Submenu: []
           }));
 
           return { ...m, Submenu: mappedSubmenus };
         })
       );
 
-      setMenu(menuWithSubmenus);
+      const dashboardMenu: MenuItem = {
+        menuId: 0,
+        menuName: "Dashboard",
+        navigation: "Dashboard",
+        Submenu: []
+      };
+
+      setMenu([dashboardMenu, ...menuWithSubmenus]);
     } catch (err) {
       console.error("Failed to fetch menu:", err);
     }
@@ -69,6 +90,7 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
 
   fetchMenu();
 }, [token]);
+
 
 
   const handleToggleMenu = (menuId: number, level: number) => {
