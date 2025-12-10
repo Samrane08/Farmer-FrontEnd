@@ -841,12 +841,12 @@ export async function getApplicantPaymentStatus(bearerToken: string): Promise<st
 
 export async function getAccountLogin(username: string, password: string): Promise<string> {
   let model = {
-    UserName: username,
-    Password: password
+    userId: username,
+    password: password
   }
   let config = {
     method: 'post',
-    url: `${globalURL}fv_user-service/api/Account/farmer-login`,
+    url: `${globalURL}fv_user-service/api/Auth/UserLogin`,
     headers: {
       'Content-Type': 'application/json'
     },
