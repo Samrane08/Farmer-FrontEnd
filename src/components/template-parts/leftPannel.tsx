@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTranslation } from "react-i18next";
-import { getAppMenu, getSubMenu } from "../../Services/commonDL"; // adjust path
+import { getAppMenu, getSubMenu } from "../../Services/commonDL"; 
 import { useSelector } from "react-redux";
 
 interface MenuItem {
@@ -28,7 +28,7 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
   const location = useLocation();
   const { t } = useTranslation("App.Appliacation");
 
-  // ---------------- Animations ----------------
+  
   const menuAnimations = {
     menuItem: { hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } },
     subMenu: {
@@ -38,23 +38,23 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
     },
   };
 
-  // ---------------- Fetch menus ----------------
+  
   useEffect(() => {
   const fetchMenu = async () => {
     if (!token) return;
 
     try {
-      const menus = await getAppMenu(token, 1); // menu: {menuId, menuName}
+      const menus = await getAppMenu(token, 1); 
 
       const menuWithSubmenus = await Promise.all(
         menus.map(async (m: any) => {
           const sub = await getSubMenu(token, 1, m.menuId);
 
           const mappedSubmenus = sub.map((s: any, index: number) => ({
-            menuId: index + 1,          // assign unique incremental ids
-            menuName: s.subMenu,        // your API name
-            navigation: s.navigation,   // your API navigation
-            Submenu: []                 // no deeper submenus for now
+            menuId: index + 1,          
+            menuName: s.subMenu,        
+            navigation: s.navigation,   
+            Submenu: []                 
           }));
 
           return { ...m, Submenu: mappedSubmenus };
@@ -70,7 +70,7 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
   fetchMenu();
 }, [token]);
 
-  // ---------------- Toggle submenu ----------------
+
   const handleToggleMenu = (menuId: number, level: number) => {
     setOpenMenus((prev) => {
       const newState: Record<string, boolean> = {};
@@ -87,7 +87,7 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
     return item.Submenu ? item.Submenu.some(isPathActive) : false;
   };
 
-  // ---------------- Recursive menu rendering ----------------
+  
   const renderMenuItems = (items: MenuItem[], level = 0) => {
     const baseIndent = 10;
     const tabSize = 10;
