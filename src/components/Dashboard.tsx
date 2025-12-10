@@ -1,73 +1,73 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import Header from "./Header";
 
+const StatCard: React.FC<{
+  title: string;
+  iconLeft?: string;
+  iconRight?: string;
+  value: string | number;
+  className?: string;
+}> = ({ title, iconLeft, iconRight, value, className }) => (
+  <div className="col-12 col-md-4 mb-4">
+    <div className={`card ${className}`}>
+      <div className="card-body">
+        <h5 className="card-title">{title}</h5>
+
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <i className="bi bi-currency-rupee"></i>
+            {iconRight && (
+              <i
+                className={iconRight}
+                style={{ marginLeft: "-12px", fontSize: "2rem" }}
+              ></i>
+            )}
+          </div>
+          <h2 className="card-text">{value}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Dashboard: React.FC = () => {
-  const { fullName, token, roleId, bankId } = useSelector(
-    (state: any) => state.authenticate
-  );
+  // Hardcoded values for initial testing
+  const fullName = "John Doe";
+  const roleId = 1;
+  const bankId = 4;
 
   return (
     <div className="container-fluid">
       <Header />
 
-      <div className="row justify-content-center align-items-center mt-3">
+      {/* Test Info */}
+      <div className="text-center mt-3">
         <h3>
-          Test (delete later): FullName: {fullName} | RoleId: {roleId} | BankId:{" "}
-          {bankId}
+          Test (delete later): FullName: {fullName} | RoleId: {roleId} | BankId: {bankId}
         </h3>
+      </div>
 
-        {/* Card 1 */}
-        <div className="col">
-          <div className="card bggblue">
-            <div className="card-body">
-              <h5 className="card-title">Expected Loan Amount</h5>
-              <div className="d-flex justify-content-between">
-                <i className="bi bi-currency-rupee"></i>
-                <h2 className="card-text">54,470</h2>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Cards Row */}
+      <div className="row justify-content-center align-items-center mt-3">
+        <StatCard
+          title="Expected Loan Amount"
+          value={54470}
+          className="bggblue"
+        />
 
-        {/* Card 2 */}
-        <div className="col">
-          <div className="card bggreen">
-            <div className="card-body">
-              <h5 className="card-title">Uploaded Loan Amount</h5>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <i className="bi bi-currency-rupee"></i>
-                  <i
-                    className="bi bi-cloud-upload-fill"
-                    style={{ marginLeft: "-12px", fontSize: "2rem" }}
-                  ></i>
-                </div>
-                <h2 className="card-text">54,145</h2>
-              </div>
-            </div>
-          </div>
-        </div>
+        <StatCard
+          title="Uploaded Loan Amount"
+          value={54145}
+          className="bggreen"
+          iconRight="bi bi-cloud-upload-fill"
+        />
 
-        {/* Card 3 */}
-        <div className="col">
-          <div className="card bggorange">
-            <div className="card-body">
-              <h5 className="card-title">Pending Loan Amount</h5>
-              <div className="d-flex justify-content-between">
-                <div>
-                  <i className="bi bi-currency-rupee"></i>
-                  <i
-                    className="bi bi-hourglass-top"
-                    style={{ marginLeft: "-12px", fontSize: "2rem" }}
-                  ></i>
-                </div>
-                <h2 className="card-text">325</h2>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <StatCard
+          title="Pending Loan Amount"
+          value={325}
+          className="bggorange"
+          iconRight="bi bi-hourglass-top"
+        />
       </div>
     </div>
   );
