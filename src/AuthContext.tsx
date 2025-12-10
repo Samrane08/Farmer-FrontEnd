@@ -1,30 +1,53 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
+  token: string | null;
   isLoggedIn: boolean;
-  login: () => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    return localStorage.getItem("isLoggedIn") === "true";
+  const [token, setToken] = useState<string | null>(() => {
+    return localStorage.getItem("token");
   });
 
-  const login = () => {
-    setIsLoggedIn(true);
-    localStorage.setItem("isLoggedIn", "true");
+  const isLoggedIn = !!token;
+
+  useEffect(() => {
+    if (!token) return;
+
+    const { exp }: any = jwtDecode(token);
+    const expiryTime = exp * 1000;
+    const now = Date.now();
+
+    if (expiryTime <= now) {
+      logout();
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      logout();
+    }, expiryTime - now);
+
+    return () => clearTimeout(timeout);
+  }, [token]);
+
+  const login = (receivedToken: string) => {
+    setToken(receivedToken);
+    localStorage.setItem("token", receivedToken);
   };
 
   const logout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem("isLoggedIn");
+    setToken(null);
+    localStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ token, isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
