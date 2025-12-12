@@ -10,6 +10,7 @@ import Dashboard from "./components/Dashboard";
 
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
+import UploadFarmerData from "./components/UploadBankData";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,16 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <ApplicantLayout>
               <Dashboard />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/uploadexcel-upload",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <UploadFarmerData />
             </ApplicantLayout>
           </ProtectedRoute>
         ),
