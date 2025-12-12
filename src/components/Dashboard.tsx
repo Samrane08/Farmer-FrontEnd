@@ -1,135 +1,81 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import Header from "./Header";
-import aaplesarkar from "../../src/Images/aaple-sarkar.jpg";
-import enb from "../../src/Images/enbI1.png";
-import noimage from "../../src/Images/no_image_available.jpg";
-import your from "../../src/Images/Right-Serve.png";
+import { useSelector } from "react-redux";
+import { parseToken } from "../Services/jwtDecode";
+import { RootState } from "../store/index";
+
+const StatCard: React.FC<{
+  title: string;
+  iconLeft?: string;
+  iconRight?: string;
+  value: string | number;
+  className?: string;
+}> = ({ title, iconLeft, iconRight, value, className }) => (
+  <div className="col-12 col-md-4 mb-4">
+    <div className={`card ${className}`}>
+      <div className="card-body">
+        <h5 className="card-title">{title}</h5>
+
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <i className="bi bi-currency-rupee"></i>
+            {iconRight && (
+              <i
+                className={iconRight}
+                style={{ marginLeft: "-12px", fontSize: "2rem" }}
+              ></i>
+            )}
+          </div>
+          <h2 className="card-text">{value}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>("registration");
-  const [otpSent, setOtpSent] = useState(false);
+  const token = useSelector((state: RootState) => state.authenticate.token);
 
-  const [aadhaarNo, setAadhaarNo] = useState("");
-  const [aadhaarOtp, setAadhaarOtp] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
-   const divToPrintRef = useRef<HTMLDivElement>(null);
+  let fullName = "N/A";
+  let roleId = 0;
+  let bankId = 0;
+  let districtId = 0;
 
-   function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setIsChecked(e.target.checked);
+  if (token) {
+    try {
+      const decoded = parseToken(token);
+      fullName = decoded.Name;
+      roleId = decoded.RoleId;
+      bankId = decoded.BankId;
+      districtId = decoded.DistrictId;
+    } catch (err) {
+      console.error("Failed to decode token:", err);
+    }
   }
-
-  const handleRequestOtp = (event: React.FormEvent) => {
-    event.preventDefault();
-    // TODO: implement OTP request logic with aadhaarNo
-    setOtpSent(true);
-  };
-
-  const handleVerifyOtp = (event: React.FormEvent) => {
-    event.preventDefault();
-    // TODO: implement OTP verification logic with aadhaarOtp
-  };
-
-  const policeVerify = (event: React.FormEvent) => {
-    event.preventDefault();
-    // TODO: implement police verification logic
-  };
-
-  const handleRegistrationSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // TODO: handle registration submit logic
-  };
-
-  const handlePrint = () => {
-    const content = divToPrintRef.current;
-    if (!content) return;
-
-    // Create hidden iframe
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "absolute";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
-    iframe.style.border = "none";
-    document.body.appendChild(iframe);
-
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!iframeDoc) return;
-
-    // Write into the iframe properly
-    iframeDoc.open();
-    iframeDoc.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Print Div</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              padding: 20px;
-            }
-            img {
-              max-width: 100%;
-            }
-          </style>
-        </head>
-        <body>${content.outerHTML}</body>
-      </html>
-    `);
-    iframeDoc.close();
-
-    // Wait until the iframe finishes rendering
-    iframe.onload = () => {
-      iframe.contentWindow?.focus();
-      iframe.contentWindow?.print();
-      setTimeout(() => document.body.removeChild(iframe), 1000);
-    };
-  };
 
   return (
     <div className="container-fluid">
-      <div className="row justify-content-center align-items-center">
-        <div className="col">
-          <div className="card bggblue">
-            <div className="card-body">
-               <h5 className="card-title">Expected Loan Amount</h5>
-               <div className="d-flex justify-content-between">
-                <i className="bi bi-currency-rupee"></i>
-                 <h2 className="card-text">54,470</h2>
-               </div>
-             
-            </div>
-          </div>
-          </div>
-           <div className="col">
-             <div className="card bggreen">
-            <div className="card-body">
-               <h5 className="card-title">Uploaded Loan Amount</h5>
-                 <div className="d-flex justify-content-between">
-               <div>
-                 <i className="bi bi-currency-rupee"></i>
-                <i className="bi bi-cloud-upload-fill" style={{marginLeft: "-12px", fontSize: "2rem"}}></i>
-               </div>
-                 <h2 className="card-text">54,145</h2>
-               </div>
-             
-            </div>
-          </div>
-          </div>
-           <div className="col">
-             <div className="card bggorange">
-            <div className="card-body">
-               <h5 className="card-title">Pending Loan Amount</h5>
-                 <div className="d-flex justify-content-between">
-               <div>
-                 <i className="bi bi-currency-rupee"></i>
-               <i className="bi bi-hourglass-top" style={{marginLeft: "-12px", fontSize: "2rem"}}></i>
-               </div>
-                 <h2 className="card-text">325</h2>
-               </div>
-             
-            </div>
-          </div>
-          </div>
-        </div>
+      <div className="text-center mt-3">
+        <h3>
+          Test (delete later): FullName: {fullName} | RoleId: {roleId} | BankId: {bankId} | DistrictId: {districtId}
+        </h3>
+      </div>
+
+      <div className="row justify-content-center align-items-center mt-3">
+        <StatCard title="Expected Loan Amount" value={54470} className="bggblue" />
+        <StatCard
+          title="Uploaded Loan Amount"
+          value={54145}
+          className="bggreen"
+          iconRight="bi bi-cloud-upload-fill"
+        />
+        <StatCard
+          title="Pending Loan Amount"
+          value={325}
+          className="bggorange"
+          iconRight="bi bi-hourglass-top"
+        />
+      </div>
     </div>
   );
 };

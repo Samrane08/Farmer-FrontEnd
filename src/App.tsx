@@ -1,68 +1,65 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate  } from 'react-router-dom';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RootLayout from './components/Root';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
-import Dashboard from './components/Dashboard';
-//import {AuthProvider } from './AuthContext';
-import ProtectedRoute from './ProtectedRoute';
-import Login from './components/Login';
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// import Students from './components/Students';
-// import Teachers from './components/Teachers';
-// import Parents from './components/Parents';
-// import Library from './components/Library';
-// import Attendance from './components/Attendance';
-// import Exam from './components/Exam';
-// import Hostel from './components/Hostel';
-// import Account from './components/Account';
-// import Settings from './components/Settings';
-import './App.css';
-import SecondLayout from './components/SecoundLayout';
-import ApplicantLayout from './components/ApplicantLayout';
+import RootLayout from "./components/Root";
+import SecondLayout from "./components/SecoundLayout";
+import ApplicantLayout from "./components/ApplicantLayout";
 
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
 
-// const App: React.FC = () => {
-//   return (
-//      <AuthProvider>
-//       <Router>
-//         <div className="app-container">
-//           <Header/>
-//           <main>
-//             <Routes>
-//               <Route path="/login" element={<Login />} />
-//               <Route
-//                 path="/"
-//                 element={
-//                   <ProtectedRoute>
-//                     <Dashboard />
-//                   </ProtectedRoute>
-//                 }
-//               />
-//               <Route path="*" element={<Navigate to="/login" replace />} />
-//             </Routes>
-//           </main>
-//         </div>
-//       </Router>
-//     </AuthProvider>
-//   );
-// };
+import { AuthProvider } from "./AuthContext";
+import ProtectedRoute from "./ProtectedRoute";
+import UploadFarmerData from "./components/UploadBankData";
+
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <RootLayout />,
-         errorElement: <></>,
-        children: [
-            { path: '/', element: <SecondLayout><Login /></SecondLayout> },
-             { path: '/Dashboard', element: <ApplicantLayout><Dashboard /></ApplicantLayout> },
-             
-        ]
-    },
-])
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <></>,
+
+    children: [
+      // Public Route (Login)
+      {
+        path: "/",
+        element: (
+          <SecondLayout>
+            <Login />
+          </SecondLayout>
+        ),
+      },
+
+      // Protected Dashboard
+      {
+        path: "/Dashboard",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <Dashboard />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/uploadexcel-upload",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <UploadFarmerData />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
+]);
 
 function App() {
-    return <RouterProvider router={router} />
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;

@@ -1,19 +1,20 @@
 import React, { useState, useEffect, Fragment } from "react";
-// import { useAppSelector } from "../../store/hooks";
-// import { getAppMenu } from "../../services/commonDL";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useLocation, NavLink } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Divide as Hamburger } from "hamburger-react";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useTranslation } from "react-i18next";
+import { getAppMenu, getSubMenu } from "../../Services/commonDL"; 
+import { useSelector } from "react-redux";
+import { parseToken } from "../../Services/jwtDecode";
+import { RootState } from "../../store/index";
 
-// ---------------- Interfaces ----------------
 interface MenuItem {
-  Id: number;
-  MenuName: string;
-  MenuNameMr: string;
-  Url: string;
+  menuId: number;
+  menuName: string;
+  menuNameMr?: string;
+  navigation?: string;
+  subMenuName?: string;
   Submenu?: MenuItem[];
 }
 
@@ -21,119 +22,107 @@ interface LeftPannelProps {
   isOpen: boolean;
   onToggle: (isOpen: boolean) => void;
 }
-const menuData: MenuItem[] = [
-  {
-    Id: 1,
-    MenuName: "Dashboard",
-    MenuNameMr: "डॅशबोर्ड",
-    Url: "dashboard",
-    Submenu: []
-  },
-  {
-    Id: 2,
-    MenuName: "Upload Data",
-    MenuNameMr: "डॅशबोर्ड",
-    Url: "UploadData",
-    Submenu: []
-  },
-  {
-    Id: 3,
-    MenuName: "Upload Data Dashboard",
-    MenuNameMr: "डॅशबोर्ड",
-    Url: "UploadDataDashboard",
-    Submenu: []
-  },
-  // {
-  //   Id: 4,
-  //   MenuName: "Users",
-  //   MenuNameMr: "वापरकर्ते",
-  //   Url: "",
-  //   Submenu: [
-  //     {
-  //       Id: 5,
-  //       MenuName: "Add User",
-  //       MenuNameMr: "वापरकर्ता जोडा",
-  //       Url: "users/add",
-  //       Submenu: []
-  //     },
-  //     {
-  //       Id: 6,
-  //       MenuName: "Manage Users",
-  //       MenuNameMr: "वापरकर्ते व्यवस्थापित करा",
-  //       Url: "users/manage",
-  //       Submenu: []
-  //     }
-  //   ]
-  // },
-  // ... more menu items as needed
-];
 
-
-// ---------------- Component ----------------
 const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
   const [menu, setMenu] = useState<MenuItem[]>([]);
-  const [activeItem, setActiveItem] = useState<string>("Home");
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-
-
+  const token = useSelector((state: RootState) => state.authenticate.token);
   const location = useLocation();
   const { t } = useTranslation("App.Appliacation");
 
-  // ---------------- Animations ----------------
+    let roleId = 0;
+  
+    if (token) {
+      try {
+        const decoded = parseToken(token);
+        roleId = decoded.RoleId;
+      } catch (err) {
+        console.error("Failed to decode token:", err);
+      }
+    }
+
   const menuAnimations = {
     menuItem: { hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } },
     subMenu: {
       hidden: { opacity: 0, height: 0 },
       visible: { opacity: 1, height: "auto", transition: { staggerChildren: 0.05 } },
-      exit: { opacity: 0, height: 0 }
+      exit: { opacity: 0, height: 0 },
+    },
+  };
+
+  
+  useEffect(() => {
+  const fetchMenu = async () => {
+    if (!token) return;
+
+    try {
+
+      
+      const menus = await getAppMenu(token, roleId);
+
+      const menuWithSubmenus = await Promise.all(
+        menus.map(async (m: any) => {
+          const sub = await getSubMenu(token, roleId, m.menuId);
+
+          const mappedSubmenus = sub.map((s: any, index: number) => ({
+            menuId: index + 1000,     
+            menuName: s.subMenu,
+            navigation: s.navigation,
+            Submenu: []
+          }));
+
+          return { ...m, Submenu: mappedSubmenus };
+        })
+      );
+
+      const dashboardMenu: MenuItem = {
+        menuId: 0,
+        menuName: "Dashboard",
+        navigation: "Dashboard",
+        Submenu: []
+      };
+
+      setMenu([dashboardMenu, ...menuWithSubmenus]);
+    } catch (err) {
+      console.error("Failed to fetch menu:", err);
     }
   };
 
-  // Example useEffect to set menu data
-useEffect(() => {
-  setMenu(menuData); // where menuData is your array of MenuItem
-}, []);
+  fetchMenu();
+}, [token]);
 
-  // ---------------- Helper: toggle submenu ----------------
-  const handleToggleMenu = (menuName: string, level: number) => {
+
+
+  const handleToggleMenu = (menuId: number, level: number) => {
     setOpenMenus((prev) => {
       const newState: Record<string, boolean> = {};
-      // Keep keys from other levels
       Object.keys(prev).forEach((key) => {
         if (!key.startsWith(`L${level}-`)) newState[key] = prev[key];
       });
-      // Toggle current
-      newState[`L${level}-${menuName}`] = !prev[`L${level}-${menuName}`];
+      newState[`L${level}-${menuId}`] = !prev[`L${level}-${menuId}`];
       return newState;
     });
   };
 
-  // ---------------- Fetch menu data ----------------
-
-
-  // ---------------- Helper: find active path ----------------
   const isPathActive = (item: MenuItem): boolean => {
-    if (`/${item.Url}` === location.pathname) return true;
+    if (`/${item.navigation}` === location.pathname) return true;
     return item.Submenu ? item.Submenu.some(isPathActive) : false;
   };
 
-  // ---------------- Auto-expand for active route ----------------
- 
-
-  // ---------------- Recursive menu rendering ----------------
+  
   const renderMenuItems = (items: MenuItem[], level = 0) => {
     const baseIndent = 10;
     const tabSize = 10;
 
     return items.map((item) => {
-      const isActive = `/${item.Url}` === location.pathname;
+      const isActive = `/${item.navigation}` === location.pathname;
       const isParentActive = isPathActive(item);
       const hasSubmenu = item.Submenu && item.Submenu.length > 0;
-      const isOpenMenu = openMenus[`L${level}-${item.MenuName}`];
+      const isOpenMenu = openMenus[`L${level}-${item.menuId}`];
       const paddingLeft = baseIndent + level * tabSize;
 
       return (
-        <motion.li key={item.MenuName} variants={menuAnimations.menuItem}>
+        <motion.li key={item.menuId} variants={menuAnimations.menuItem}>
           {hasSubmenu ? (
             <Fragment>
               <a
@@ -141,9 +130,9 @@ useEffect(() => {
                   ${isParentActive ? "menu-parent-active" : ""}
                   ${isActive ? "menu-active" : ""}`}
                 style={{ paddingLeft }}
-                onClick={() => handleToggleMenu(item.MenuName, level)}
+                onClick={() => handleToggleMenu(item.menuId, level)}
               >
-                {"0" === "0" ? item.MenuName : item.MenuNameMr}
+                {item.menuName}
                 {isOpenMenu ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </a>
               <AnimatePresence>
@@ -162,13 +151,11 @@ useEffect(() => {
             </Fragment>
           ) : (
             <NavLink
-              className={`nav-link text-white
-                ${isActive ? "menu-active" : ""}`}
+              className={`nav-link text-white ${isActive ? "menu-active" : ""}`}
               style={{ paddingLeft }}
-              to={`/${item.Url}`}
-              onClick={() => setActiveItem(item.MenuName)}
+              to={`/${item.navigation}`}
             >
-              {"0" === "0" ? item.MenuName : item.MenuNameMr}
+              {item.menuName}
             </NavLink>
           )}
         </motion.li>
@@ -176,7 +163,6 @@ useEffect(() => {
     });
   };
 
-  // ---------------- Render ----------------
   return (
     <>
       {isOpen && <div className="mask" onClick={() => onToggle(false)} />}
@@ -184,7 +170,6 @@ useEffect(() => {
         className="text-white hamburgertagg btn btn-warning btn-sm"
         onClick={() => onToggle(!isOpen)}
       >
-        {/* <Hamburger duration={0.2} toggled={isOpen} size={24} toggle={() => {}} distance="sm" /> */}
         <i className="bi bi-list"></i>
       </button>
 

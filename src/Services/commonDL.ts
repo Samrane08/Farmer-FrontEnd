@@ -209,22 +209,43 @@ export async function getIssuingAuthorityList(bearerToken: string, drpType: stri
   }
 };
 
-export async function getAppMenu(bearerToken: string): Promise<string> {
-  let config = {
-    method: 'get',
-    url: `${globalURL}fv_user-service/api/menu`,
+export async function getAppMenu(bearerToken: string, roleId: number) {
+  const config = {
+    method: "post",
+    url: `${globalURL}fv_user-service/api/Menu/GetMenus`,
     headers: {
-      'Authorization': `Bearer ${bearerToken}`,
+      "Authorization": `Bearer ${bearerToken}`,
+      "Content-Type": "application/json",
     },
-
+    data: { roleId },
   };
 
   try {
     const response = await axios.request(config);
-    return JSON.stringify(response);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching menus:", error);
+    return [];
   }
-  catch (error) {
-    return JSON.stringify(error);
+};
+
+export async function getSubMenu(bearerToken: string, roleId: number, menuId: number) {
+  const config = {
+    method: "post",
+    url: `${globalURL}fv_user-service/api/Menu/GetSubMenus`,
+    headers: {
+      "Authorization": `Bearer ${bearerToken}`,
+      "Content-Type": "application/json",
+    },
+    data: { roleId, menuId },
+  };
+
+  try {
+    const response = await axios.request(config);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching submenus:", error);
+    return [];
   }
 };
 
@@ -841,12 +862,12 @@ export async function getApplicantPaymentStatus(bearerToken: string): Promise<st
 
 export async function getAccountLogin(username: string, password: string): Promise<string> {
   let model = {
-    UserName: username,
-    Password: password
+    userId: username,
+    password: password
   }
   let config = {
     method: 'post',
-    url: `${globalURL}fv_user-service/api/Account/farmer-login`,
+    url: `${globalURL}fv_user-service/api/Auth/UserLogin`,
     headers: {
       'Content-Type': 'application/json'
     },
