@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard";
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UploadFarmerData from "./components/UploadBankData";
+import FormerUploadedBankData from "./components/FormerUploadedBank";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,16 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <ApplicantLayout>
               <UploadFarmerData />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/filesummary-filesummary",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <FormerUploadedBankData />
             </ApplicantLayout>
           </ProtectedRoute>
         ),
