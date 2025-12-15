@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/deleteddata-dashboard",
+        path: "/deletedbankrecordlist-deletedbankrecordlist",
         element: (
           <ProtectedRoute>
             <ApplicantLayout>
