@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard";
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UploadFarmerData from "./components/UploadBankData";
+import DeletedDataDashboard from "./components/DeletedDataDashboard";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,16 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <ApplicantLayout>
               <UploadFarmerData />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/deleteddata-dashboard",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <DeletedDataDashboard />
             </ApplicantLayout>
           </ProtectedRoute>
         ),
