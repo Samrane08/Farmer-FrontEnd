@@ -1,6 +1,7 @@
 import axios from "axios";
 import { globalURL } from "./globalEnv";
 //import { globalURL_sh } from "./globalEnv";
+import { generateDeviceFingerprint } from "../Utility/deviceFingerprint";
 
 export async function getDistrictList(lang: string, bearerToken: string): Promise<string> {
   let config = {
@@ -861,9 +862,13 @@ export async function getApplicantPaymentStatus(bearerToken: string): Promise<st
 };
 
 export async function getAccountLogin(username: string, password: string): Promise<string> {
+
+  const deviceFingerprint = generateDeviceFingerprint();
+
   let model = {
-    userId: username,
-    password: password
+    userName: username,
+    password: password,
+    deviceFingerprint: deviceFingerprint
   }
   let config = {
     method: 'post',
