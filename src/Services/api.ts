@@ -38,7 +38,7 @@ export async function apiCall<T>(
       options.body = isFormData ? body : JSON.stringify(body);
     }
 
-    const response = await fetch(`${globalURL}${url}`, options);
+    const response = await fetch(`https://localhost:7241/${url}`, options);
     const status = response.status;
 
     if (!response.ok) {
