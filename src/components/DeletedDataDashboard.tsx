@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Header from "./Header";
 import { useSelector } from "react-redux";
 import { parseToken } from "../Services/jwtDecode";
@@ -7,6 +7,11 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { apiCall, buildQueryParams } from "../Services/api";
 import { getDeletedBankDataResponse } from "../Services/apiEndPoint";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
 
 
 
@@ -22,8 +27,11 @@ const DeletedDataDashboard: React.FC = () => {
     const [previewData, setPreviewData] = useState<any>({});
     const [rows, setRows] = useState<Record<string, any>[]>([]);
     const [pageNo, setPageNo] = useState(1);
-    const [pageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(10);
     const [totalCount, setTotalCount] = useState(0);
+      const hiddenColumns = ["BRID","BankId"];
+  const sortableColumns = ["BranchName","IFSCCode","LoanHolderName"];
+  const [first, setFirst] = useState(0);
   
 
   if (token) {
@@ -38,12 +46,10 @@ const DeletedDataDashboard: React.FC = () => {
     }
   }
 
-      useEffect(() => {
-        getDeletedBankData();
-      }, []);
-
+  useEffect(() => {
+  getDeletedBankData();
+}, [pageNo, pageSize]);
     const getDeletedBankData = async () => {
-        debugger
         setIsLoading(true);
             try {
               const params = {
@@ -53,9 +59,8 @@ const DeletedDataDashboard: React.FC = () => {
               const query = buildQueryParams(params);
               const response = await apiCall<any>(`${getDeletedBankDataResponse}?${query}`, "", "GET");
               if (response.status === 200) {
-                debugger
-                 setRows(response.data);
-                setTotalCount(response.data.TotalRecords ?? 0);
+                 setRows(Array.isArray(response.data.data) ? response.data.data : []);
+                setTotalCount(response.data.totalCount ?? 0);
                 if (response.data.length > 0) setPreviewData(response.data ?? {});
                 else toast(response.data.Message, { type: "error", position: "top-center" });
               } else if (response.status === 401) {
@@ -72,49 +77,65 @@ const DeletedDataDashboard: React.FC = () => {
         // Implement the logic to fetch deleted bank data
     }
 
-    if (rows.length === 0) return <p>No data</p>;
+    const dynamicColumns = useMemo(() => {
+        if (!rows.length) return [];
+        return Object.keys(rows[0])
+          .filter((col) => !hiddenColumns.includes(col))
+          .map((col) => ({
+            field: col,
+            header: col.replace(/_/g, " "),
+            sortable: sortableColumns.includes(col)
+          }));
+      }, [rows]);
+        const bodyTemplate = (rowData: any, column: any) => {
+    const value = rowData[column.field];
+    return value !== null && value !== undefined ? value : "-";
+  };
 
-    const columns = Object.keys(rows[0]).filter(
-    c => c !== "TotalCount"
-    );
 
-  const totalPages = Math.ceil(totalCount / pageSize);
+
+
+
+  const onPageChange = (event: any) => {
+  setFirst(event.first);
+  setPageNo(event.page + 1); // API expects 1-based page
+  setPageSize(event.rows); // ✅ user-selected page size
+};
+useEffect(() => {
+  setPageNo(1);
+  setFirst(0);
+}, [pageSize]);
 
   return (
-    <>
-      <table border={1} cellPadding={5}>
-        <thead>
-          <tr>
-            {columns.map(col => (
-              <th key={col}>{col}</th>
+    <div className="application-preview form">
+          <h5 className="mb-3">Uploaded Bank Data</h5>
+          <DataTable
+                value={rows}
+                loading={isLoading}
+                paginator
+                lazy
+                first={first}
+                rows={pageSize}
+                totalRecords={totalCount}
+                onPage={onPageChange}
+                rowsPerPageOptions={[10, 25, 50, 100]}
+                scrollable
+                stripedRows
+                showGridlines
+                emptyMessage="No records found"
+>
+            {dynamicColumns.map((col) => (
+              <Column
+                key={col.field}
+                field={col.field}
+                header={col.header}
+                sortable={col.sortable}
+                body={bodyTemplate}
+              />
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={i}>
-              {columns.map(col => (
-                <td key={col}>{row[col]}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Pagination */}
-      <div style={{ marginTop: "10px" }}>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
-          <button
-            key={p}
-            onClick={() => setPageNo(p)}
-            disabled={p === pageNo}
-            style={{ marginRight: "5px" }}
-          >
-            {p}
-          </button>
-        ))}
-      </div>
-    </>
+    
+          </DataTable>
+        </div>
   );
 };
 

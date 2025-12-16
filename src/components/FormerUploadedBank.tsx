@@ -2,12 +2,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { apiCall, buildQueryParams } from "../Services/api";
 import { getFormerUploadedBankData } from "../Services/apiEndPoint";
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css';
+
 
 const FormerUploadedBankData: React.FC = () => {
   const navigate = useNavigate();
