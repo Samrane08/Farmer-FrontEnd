@@ -3,7 +3,8 @@ import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { renderToString } from "react-dom/server";
-import {  postOfflineExistingApplicant } from "../Services/OfflineApplicantDL";
+import {  postOfflineExistingApplicant ,DownloadIFSCCode} from "../Services/OfflineApplicantDL";
+import { Button } from "@mui/material";
 
 interface AadhaarData {
   BankName: string;
@@ -64,7 +65,7 @@ interface AadhaarData {
 }
 
 const UploadFarmerData = () => {
-    const bearerToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZGY3NTE0MC1mZmYzLTQ5MTYtOTJhZS1mM2U3OWFjNmFhZWQiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImZkZjc1MTQwLWZmZjMtNDkxNi05MmFlLWYzZTc5YWM2YWFlZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcHJpbWFyeXNpZCI6IjIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3NlcmlhbG51bWJlciI6IjVlYjVmODZjLTg2NjgtNDE2OS1iZTdmLTc3MmIyM2NiMDJmZiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDkvMDkvaWRlbnRpdHkvY2xhaW1zL2FjdG9yIjoiRmFybWVyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9ncm91cHNpZCI6IiIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3NpZCI6IiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcHJpbWFyeWdyb3Vwc2lkIjoiMCIsImp0aSI6IjY2MGIwODRjLTZlNzgtNGIxNC1hNDg4LWM2YWE5MzNjMTZlZSIsIm5iZiI6MTc2NTE5MzcwMSwiZXhwIjoxNzk2NzI5NzAxLCJpc3MiOiJGYXJtZXJVc2VyIiwiYXVkIjoiRmFybWVyVXNlciJ9.favz4N6-YpZSYQ4SS4tQkHe2hVTD1S9bqzThxyDYALU";
+    const bearerToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiZGV2ICIsIlJvbGVJZCI6IjEiLCJCYW5rSWQiOiI0IiwiRGlzdHJpY3RJZCI6IjAiLCJkZnAiOiJiMjE4YzJhY2ZhZTZjZGYzODY0ZTljMDE3NTRkMTZjODhkZGM3MzExNjg4NTVjZWVhNTFhYmMwMGUxNDVkM2E4IiwiZXhwIjoxNzY1OTU1NzE4LCJpc3MiOiJZb3VySXNzdWVyIiwiYXVkIjoiWW91ckF1ZGllbmNlIn0.bzhs2A8AXl1qSeeSM_YFDtG9DZviRUk4Z5rkhTkfhCc";
   
   const [fileToUpload, setFileToUpload] = useState<File | undefined>();
   const [randomStr, setRandomStr] = useState("");
@@ -409,13 +410,32 @@ const UploadFarmerData = () => {
   }
 };
 
-    
+     const handleDownload = () => {
+
+    DownloadIFSCCode(bearerToken).then((resp) => {
+      const strObj = JSON.parse(resp);
+     
+    });
+  };
 
   return (
     <div>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
       <button onClick={uploadFile}>Upload Excel</button>
+
+      <div className="d-flex w-100 justify-content-center">
+                      <Button
+                        variant="contained"
+                        className="mb-1 text-center"
+                        onClick={handleDownload}
+                        endIcon={<img alt="" style={{ width: "24px" }}></img>}
+                      >
+                        Download
+                      </Button>
+                    </div>
     </div>
+
+    
   );
 };
 
