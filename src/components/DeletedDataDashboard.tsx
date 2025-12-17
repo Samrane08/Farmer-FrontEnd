@@ -6,7 +6,7 @@ import { RootState } from "../store/index";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { apiCall, buildQueryParams } from "../Services/api";
-import { getDeletedBankDataResponse } from "../Services/apiEndPoint";
+import { DownloadDeletedDataDashboard, getDeletedBankDataResponse } from "../Services/apiEndPoint";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
@@ -106,8 +106,40 @@ useEffect(() => {
   setFirst(0);
 }, [pageSize]);
 
+
+const downloadFiles = async () => {
+
+    setIsLoading(true);
+    try {
+      const res = await apiCall<Blob>(DownloadDeletedDataDashboard, "", "GET", undefined, "blob");
+      if (res.isBlob && res.data instanceof Blob) {
+        const url = window.URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "DeletedBankData.xlsx";
+        link.click();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch {
+      toast("Some Error occurred", { type: "error", position: "top-right" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="application-preview form">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+  <h5 className="mb-0">Uploaded Bank Data</h5>
+
+  <Button
+    label="Download CSV"
+    icon="pi pi-download"
+    className="p-button-success"
+    onClick={downloadFiles}
+    disabled={isLoading || totalCount === 0}
+  />
+</div>
           <h5 className="mb-3">Uploaded Bank Data</h5>
           <DataTable
                 value={rows}
