@@ -3,8 +3,13 @@ import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { renderToString } from "react-dom/server";
-import {  postOfflineExistingApplicant ,DownloadIFSCCode} from "../Services/OfflineApplicantDL";
-import { Button } from "@mui/material";
+import {  postOfflineExistingApplicant } from "../Services/OfflineApplicantDL";
+import { Button } from "primereact/button";
+import { apiCall, buildQueryParams } from "../Services/api";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/index";
+import { DownloadIFSCCode,DownloadPACS } from "../Services/apiEndPoint";
+import { parseToken } from "../Services/jwtDecode";
 
 interface AadhaarData {
   BankName: string;
@@ -64,13 +69,18 @@ interface AadhaarData {
   NpaTotalAmountAsOn30Sept2025: string;
 }
 
-const UploadFarmerData = () => {
-    const bearerToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJOYW1lIjoiZGV2ICIsIlJvbGVJZCI6IjEiLCJCYW5rSWQiOiI0IiwiRGlzdHJpY3RJZCI6IjAiLCJkZnAiOiJiMjE4YzJhY2ZhZTZjZGYzODY0ZTljMDE3NTRkMTZjODhkZGM3MzExNjg4NTVjZWVhNTFhYmMwMGUxNDVkM2E4IiwiZXhwIjoxNzY1OTU1NzE4LCJpc3MiOiJZb3VySXNzdWVyIiwiYXVkIjoiWW91ckF1ZGllbmNlIn0.bzhs2A8AXl1qSeeSM_YFDtG9DZviRUk4Z5rkhTkfhCc";
-  
+  const UploadFarmerData: React.FC = () => {
+    const token = useSelector((state: RootState) => state.authenticate.token);
+
+      let fullName = "N/A";
+  let roleId = 0;
+  let bankId = 0;
+  let districtId = 0;
+
+
   const [fileToUpload, setFileToUpload] = useState<File | undefined>();
   const [randomStr, setRandomStr] = useState("");
-
-  const [isLoading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -329,7 +339,7 @@ const UploadFarmerData = () => {
         toast.error("No Valid Aadhaar Data");
         return;
       }
-      setLoading(true);
+      setIsLoading(true);
       try {
         const parsedData = aadharData.map((e: any) => ({
   BankName: e.BankName,
@@ -398,10 +408,10 @@ const UploadFarmerData = () => {
 }));
 
         // 1️⃣ First API call
-        await postOfflineExistingApplicant("", parsedData, bearerToken);
+        await postOfflineExistingApplicant("", parsedData, token);
         // 2️⃣ Upload File
       } catch (error) {
-        setLoading(false);
+        setIsLoading(false);
         toast.error("File could not be uploaded. Try again.");
       }
     });
@@ -410,29 +420,69 @@ const UploadFarmerData = () => {
   }
 };
 
-     const handleDownload = () => {
-
-    DownloadIFSCCode(bearerToken).then((resp) => {
-      const strObj = JSON.parse(resp);
+ const downloadFiles = async () => {
+   
+       setIsLoading(true);
+       try {
+         const res = await apiCall<Blob>(DownloadIFSCCode, token, "GET", undefined, "blob");
+         debugger
+         console.log(res);
+         if (res.isBlob && res.data instanceof Blob) {
+           const url = window.URL.createObjectURL(res.data);
+           const link = document.createElement("a");
+           link.href = url;
+           link.download = "DownloadIFSC.xlsx";
+           link.click();
+           window.URL.revokeObjectURL(url);
+         }
+       } catch {
+         toast("Some Error occurred", { type: "error", position: "top-right" });
+       } finally {
+         setIsLoading(false);
+       }
+     };
      
-    });
-  };
+
+const downloadPACS = async () => {   
+       setIsLoading(true);
+       try {
+          const res = await apiCall<Blob>(DownloadPACS, token, "GET", undefined, "blob");
+         if (res.isBlob && res.data instanceof Blob) {
+           const url = window.URL.createObjectURL(res.data);
+           const link = document.createElement("a");
+           link.href = url;
+           link.download = "DownloadPACS.xlsx";
+           link.click();
+           window.URL.revokeObjectURL(url);
+         }
+       } catch {
+         toast("Some Error occurred", { type: "error", position: "top-right" });
+       } finally {
+         setIsLoading(false);
+       }
+     };
 
   return (
     <div>
+         <div className="d-flex w-100 justify-content-center">
+                    <Button
+                       label="Download IFSC"
+                       icon="pi pi-download"
+                       className="p-button-success"
+                       onClick={downloadFiles}                  
+                     />
+                      <Button
+                       label="Download PACS Master"
+                       icon="pi pi-download"
+                       className="p-button-success"
+                       onClick={downloadPACS}                  
+                     />
+                    </div>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
       <button onClick={uploadFile}>Upload Excel</button>
 
-      <div className="d-flex w-100 justify-content-center">
-                      <Button
-                        variant="contained"
-                        className="mb-1 text-center"
-                        onClick={handleDownload}
-                        endIcon={<img alt="" style={{ width: "24px" }}></img>}
-                      >
-                        Download
-                      </Button>
-                    </div>
+  
+
     </div>
 
     
