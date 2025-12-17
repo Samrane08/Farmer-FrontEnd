@@ -462,31 +462,71 @@ const downloadPACS = async () => {
        }
      };
 
-  return (
-    <div>
-         <div className="d-flex w-100 justify-content-center">
-                    <Button
-                       label="Download IFSC"
-                       icon="pi pi-download"
-                       className="p-button-success"
-                       onClick={downloadFiles}                  
-                     />
-                      <Button
-                       label="Download PACS Master"
-                       icon="pi pi-download"
-                       className="p-button-success"
-                       onClick={downloadPACS}                  
-                     />
-                    </div>
-      <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
-      <button onClick={uploadFile}>Upload Excel</button>
+  // return (
+  //   <div>
+  //        <div className="d-flex w-100 justify-content-center">
+  //                   <Button
+  //                      label="Download IFSC"
+  //                      icon="pi pi-download"
+  //                      className="p-button-success"
+  //                      onClick={downloadFiles}                  
+  //                    />
+  //                     <Button
+  //                      label="Download PACS Master"
+  //                      icon="pi pi-download"
+  //                      className="p-button-success"
+  //                      onClick={downloadPACS}                  
+  //                    />
+  //                   </div>
+  //     <input type="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+  //     <button onClick={uploadFile}>Upload Excel</button>
 
   
 
-    </div>
+  //   </div>
 
     
-  );
+  // );
+
+
+
+  return (
+  <div className="w-100">
+    {/* Download buttons */}
+    <div className="d-flex justify-content-center gap-3 mb-3">
+      <Button
+        label="Download IFSC"
+        icon="pi pi-download"
+        className="p-button-success"
+        onClick={downloadFiles}
+      />
+
+      <Button
+        label="Download PACS Master"
+        icon="pi pi-download"
+        className="p-button-success"
+        onClick={downloadPACS}
+      />
+    </div>
+
+    {/* Upload section */}
+    <div className="d-flex justify-content-center align-items-center gap-2">
+      <input
+        type="file"
+        accept=".xlsx,.xls"
+        onChange={handleFileChange}
+      />
+
+      <Button
+        label="Upload Excel"
+        icon="pi pi-upload"
+        className="p-button-primary"
+        onClick={uploadFile}
+      />
+    </div>
+  </div>
+);
+
 };
 
 export default UploadFarmerData;
