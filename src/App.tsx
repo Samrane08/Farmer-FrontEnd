@@ -12,6 +12,7 @@ import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UploadFarmerData from "./components/UploadBankData";
 import FormerUploadedBankData from "./components/FormerUploadedBank";
+import DeleteUploadedBankData from "./components/DeleteUploadBankData";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,16 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <ApplicantLayout>
               <FormerUploadedBankData />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/deleteuploadedbankrecord-deleteuploadedbankrecord",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <DeleteUploadedBankData />
             </ApplicantLayout>
           </ProtectedRoute>
         ),
