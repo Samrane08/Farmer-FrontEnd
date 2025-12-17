@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { apiCall, buildQueryParams } from "../Services/api";
-import { getFormerUploadedBankData } from "../Services/apiEndPoint";
+import { getDownloadFiles, getFormerUploadedBankData } from "../Services/apiEndPoint";
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 
@@ -41,9 +41,25 @@ const FormerUploadedBankData: React.FC = () => {
     }
   };
 
-  const handleDownload = (row: Record<string, any>) => {
+  const handleDownload = async (row: Record<string, any>) => {
     console.log("Download row:", row);
     // call download API using row.AFSID or dynamic key
+    setLoading(true);
+    try {
+      const res = await apiCall<Blob>(getDownloadFiles, "", "GET", undefined, "blob");
+      if (res.isBlob && res.data instanceof Blob) {
+        const url = window.URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "BankData.zip";
+        link.click();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch {
+      toast("Some Error occurred", { type: "error", position: "top-right" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   /**
