@@ -11,7 +11,7 @@ import Dashboard from "./components/Dashboard";
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import UploadFarmerData from "./components/UploadBankData";
-import FormerUploadedBankData from "./components/FormerUploadedBank";
+import DeletedDataDashboard from "./components/DeletedDataDashboard";
 import DeleteUploadedBankData from "./components/DeleteUploadBankData";
 
 const router = createBrowserRouter([
@@ -53,11 +53,21 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/filesummary-filesummary",
+        path: "/deletedbankrecordlist-deletedbankrecordlist",
         element: (
           <ProtectedRoute>
             <ApplicantLayout>
-              <FormerUploadedBankData />
+              <DeletedDataDashboard />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/deleteuploadedbankrecord-deleteuploadedbankrecord",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <DeleteUploadedBankData />
             </ApplicantLayout>
           </ProtectedRoute>
         ),
