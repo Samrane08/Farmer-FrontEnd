@@ -72,16 +72,6 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: "/deleteuploadedbankrecord-deleteuploadedbankrecord",
-        element: (
-          <ProtectedRoute>
-            <ApplicantLayout>
-              <DeleteUploadedBankData />
-            </ApplicantLayout>
-          </ProtectedRoute>
-        ),
-      },
     ],
   },
 ]);
