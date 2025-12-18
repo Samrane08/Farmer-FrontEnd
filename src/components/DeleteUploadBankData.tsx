@@ -76,6 +76,10 @@ const DeleteUploadedBankData: React.FC = () => {
       toast("Please enter search value", { type: "warning" });
       return;
     }
+    if (selectedBranch == "") {
+      toast("Please select branch", { type: "warning" });
+      return;
+    }
 
     setLoading(true);
     setRows([]);
@@ -143,7 +147,7 @@ const DeleteUploadedBankData: React.FC = () => {
       const ids = selectedRows.map((r) => r.BRID).join(",");
       const requestModel = {
         BRIds: selectedRows.map(r => r.BRID).join(","),
-        BankId: 1,
+        BankId: 2,
         ModifiedBy: 1
       };
 
