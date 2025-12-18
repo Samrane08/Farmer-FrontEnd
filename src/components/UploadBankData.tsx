@@ -425,8 +425,6 @@ interface AadhaarData {
        setIsLoading(true);
        try {
          const res = await apiCall<Blob>(DownloadIFSCCode, token, "GET", undefined, "blob");
-         debugger
-         console.log(res);
          if (res.isBlob && res.data instanceof Blob) {
            const url = window.URL.createObjectURL(res.data);
            const link = document.createElement("a");
