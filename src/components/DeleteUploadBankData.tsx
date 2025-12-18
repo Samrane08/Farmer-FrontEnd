@@ -14,6 +14,7 @@ import {
 
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
+import Swal from "sweetalert2";
 
 const DeleteUploadedBankData: React.FC = () => {
   /* ============================= */
@@ -27,6 +28,11 @@ const DeleteUploadedBankData: React.FC = () => {
   const [rows, setRows] = useState<any[]>([]);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const hiddenColumns = ["BRID", "BankId"];
+  const sortableColumns = ["AadharNo", "FarmerName", "MobileNo"];
+  const [first, setFirst] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
 
   /* ============================= */
   /* LOAD BRANCHES */
@@ -47,6 +53,21 @@ const DeleteUploadedBankData: React.FC = () => {
     }
   };
 
+  const formatRow = (obj: any) => ({
+    BRID: obj.BRID ?? "-",
+    BankId: obj.BankId ?? "-",
+    BranchName: obj.BranchName ?? "-",
+    IFSCCode: obj.IFSCCode ?? "-",
+    AadharNo: obj.AadharNo ?? "-",
+    FarmerName: obj.FarmerName ?? "-",
+    MobileNo: obj.MobileNo ?? "-",
+    SavingsAccountNumber: obj.SavingsAccountNumber ?? "-",
+    LoanAccountNumber: obj.LoanAccountNumber ?? "-",
+    SanctionedLoanAmount: obj.SanctionedLoanAmount ?? "-",
+    IsJointLoan: obj.IsJointLoan ?? "-"
+  });
+
+
   /* ============================= */
   /* SEARCH */
   /* ============================= */
@@ -62,19 +83,24 @@ const DeleteUploadedBankData: React.FC = () => {
 
     try {
       const query = buildQueryParams({
-        BranchID: selectedBranch || 0,
-        SearchBy: selectedOption.split(" ")[0],
-        SearchValue: searchValue
+        //BranchID: selectedBranch || 0,
+        searchType: selectedOption.split(" ")[0],
+        value: searchValue,
+        bankId: 2,
+        userId: 1
       });
 
-      const res = await apiCall<any>(
-        `${searchUploadedBankData}?${query}`,
-        "",
-        "GET"
-      );
-
+      const res = await apiCall<any>(`${searchUploadedBankData}?${query}`, "", "GET");
       if (res.status === 200) {
-        setRows(Array.isArray(res.data) ? res.data : []);
+        if (Array.isArray(res.data.Data)) {
+          const formattedData = res.data.Data.map((item: any) =>
+            formatRow(item)
+          );
+
+          setRows(formattedData);
+        } else {
+          toast("No Record Found", { type: "info" });
+        }
       } else {
         toast("No Record Found", { type: "info" });
       }
@@ -85,40 +111,85 @@ const DeleteUploadedBankData: React.FC = () => {
     }
   };
 
+  const getVisibleRows = () => {
+    return rows.slice(first, first + rowsPerPage);
+  };
   /* ============================= */
   /* DELETE */
   /* ============================= */
   const handleDelete = async () => {
     if (!selectedRows.length) return;
 
-    const ids = selectedRows.map((r) => r.ID).join(",");
+    const result = await Swal.fire({
+      title: "Confirm Deletion",
+      text:
+        selectedRows.length === 1
+          ? "Are you sure you want to delete this record?"
+          : `Are you sure you want to delete ${selectedRows.length} records?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, Delete",
+      cancelButtonText: "Cancel",
+      reverseButtons: true
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
-      let requestModel = {
-        Ids: ids
-      };
       setLoading(true);
-      const res = await apiCall<any>(deleteUploadedBankData, "", "POST", requestModel);
+
+      const ids = selectedRows.map((r) => r.BRID).join(",");
+      const requestModel = {
+        BRIds: selectedRows.map(r => r.BRID).join(","),
+        BankId: 1,
+        ModifiedBy: 1
+      };
+
+      const res = await apiCall<any>(
+        deleteUploadedBankData,
+        "",
+        "POST",
+        requestModel
+      );
+
       if (res.status === 200) {
-        toast("Deleted successfully", { type: "success" });
-        handleSearch();
+        await Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Selected records have been deleted.",
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        setSelectedRows([]);
+        handleSearch(); // reload table
       }
     } catch {
-      toast("Delete failed", { type: "error" });
+      Swal.fire({
+        icon: "error",
+        title: "Delete Failed",
+        text: "Something went wrong while deleting records."
+      });
     } finally {
       setLoading(false);
     }
   };
+
 
   /* ============================= */
   /* DYNAMIC COLUMNS */
   /* ============================= */
   const columns = useMemo(() => {
     if (!rows.length) return [];
-    return Object.keys(rows[0]).map((key) => ({
-      field: key,
-      header: key.replace(/_/g, " ")
-    }));
+    return Object.keys(rows[0])
+      .filter((col) => !hiddenColumns.includes(col))
+      .map((key) => ({
+        field: key,
+        header: key.replace(/_/g, " "),
+        sortable: sortableColumns.includes(key)
+      }));
   }, [rows]);
 
   /* ============================= */
@@ -182,7 +253,7 @@ const DeleteUploadedBankData: React.FC = () => {
       </div>
 
       {/* ================= SEARCH ROW ================= */}
-      <div className="row">
+      <div className="row align-items-end g-2">
 
         <div className="col-md-3 form-group">
           {/* Branch Select */}
@@ -222,7 +293,6 @@ const DeleteUploadedBankData: React.FC = () => {
           <InputText
             className="form-control"
             value={searchValue}
-            keyfilter="int"
             placeholder="Enter number"
             onChange={(e) => setSearchValue(e.target.value)}
           />
@@ -253,21 +323,76 @@ const DeleteUploadedBankData: React.FC = () => {
       {/* ================= TABLE ================= */}
       <DataTable
         value={rows}
-        loading={loading}
+        dataKey="BRID"
+        paginator
+        rows={rowsPerPage}
+        first={first}
+        rowsPerPageOptions={[10, 25, 50]}
+        onPage={(e) => {
+          setFirst(e.first);
+          setRowsPerPage(e.rows);
+          setSelectedRows([])
+        }}
         selection={selectedRows}
         onSelectionChange={(e) => setSelectedRows(e.value)}
-        dataKey="ID"
-        paginator
-        rows={10}
-        rowsPerPageOptions={[10, 25, 50]}
+        loading={loading}
         stripedRows
         showGridlines
-        emptyMessage="No Record Found"
       >
+
         <Column
-          selectionMode="multiple"
           headerStyle={{ width: "3rem" }}
+          header={() => {
+            const visibleRows = rows.slice(first, first + rowsPerPage);
+            const allSelected =
+              visibleRows.length > 0 &&
+              visibleRows.every(v =>
+                selectedRows.some(s => s.BRID === v.BRID)
+              );
+
+            return (
+              <input
+                type="checkbox"
+                checked={allSelected}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setSelectedRows(prev => {
+                      const map = new Map(prev.map(r => [r.BRID, r]));
+                      visibleRows.forEach(r => map.set(r.BRID, r));
+                      return Array.from(map.values());
+                    });
+                  } else {
+                    setSelectedRows(prev =>
+                      prev.filter(
+                        r => !visibleRows.some(v => v.BRID === r.BRID)
+                      )
+                    );
+                  }
+                }}
+              />
+            );
+          }}
+          body={(rowData) => (
+            <input
+              type="checkbox"
+              checked={selectedRows.some(r => r.BRID === rowData.BRID)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedRows(prev => {
+                    if (prev.some(r => r.BRID === rowData.BRID)) return prev;
+                    return [...prev, rowData];
+                  });
+                } else {
+                  setSelectedRows(prev =>
+                    prev.filter(r => r.BRID !== rowData.BRID)
+                  );
+                }
+              }}
+            />
+          )}
         />
+
+
 
         {columns.map((col) => (
           <Column
