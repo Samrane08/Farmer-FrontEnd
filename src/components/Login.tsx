@@ -89,7 +89,7 @@ const Login = () => {
     <div className="bg">
       <div className="loginmob">
         <h1 className="text-center m-0 pt-4 heading">
-          महाराष्ट्र राज्य शेतकरी सहाय्य योजना
+          शेतकरी कर्ज संकट निवारण योजना
         </h1>
 
         <div className="auth-box mt-5">
