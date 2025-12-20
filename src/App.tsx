@@ -13,6 +13,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import UploadFarmerData from "./components/UploadBankData";
 import DeletedDataDashboard from "./components/DeletedDataDashboard";
 import DeleteUploadedBankData from "./components/DeleteUploadBankData";
+import FormerUploadedBankData from "./components/FormerUploadedBank";
+import UploadLoanAccountDetails from "./components/UploadLoanAccountDetails";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +49,7 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ApplicantLayout>
-              <UploadFarmerData />
+              <UploadLoanAccountDetails />
             </ApplicantLayout>
           </ProtectedRoute>
         ),
@@ -58,6 +60,16 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <ApplicantLayout>
               <DeletedDataDashboard />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/filesummary-filesummary",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <FormerUploadedBankData />
             </ApplicantLayout>
           </ProtectedRoute>
         ),

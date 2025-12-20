@@ -14,3 +14,6 @@ export const DownloadDeletedDataDashboard = "api/FarmerDelete/dynamic-excel-dele
 
 export const DownloadIFSCCode = "fv_farmer-service/api/IFSCCode/download-ifsc";
 export const DownloadPACS = "fv_farmer-service/api/IFSCCode/download-pacs";
+
+//Upload Loan Account Details
+export const UploadWaiverExcel = "fv_farmer-service/api/WaiverBankFileUpload/upload-waiver-excel";

@@ -10,14 +10,17 @@ import { apiCall, buildQueryParams } from "../Services/api";
 import { getDownloadFiles, getFormerUploadedBankData } from "../Services/apiEndPoint";
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const FormerUploadedBankData: React.FC = () => {
   const navigate = useNavigate();
-
+  const bearerToken = useSelector((state: RootState) => state.authenticate.token);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [rows, setRows] = useState<Record<string, any>[]>([]);
   const hiddenColumns = ["AFSID"];
-  const sortableColumns = ["Bank_Name","User_FileName"];
+  const sortableColumns = ["Bank_Name", "User_FileName"];
 
   useEffect(() => {
     fetchData();
@@ -25,11 +28,14 @@ const FormerUploadedBankData: React.FC = () => {
 
   const fetchData = async () => {
     setLoading(true);
+    setIsLoading(true);
     try {
-      const query = buildQueryParams({ UserID: "1" });
-      const response = await apiCall<any>(`${getFormerUploadedBankData}?${query}`, "", "GET");
+      const response = await apiCall<any>(`${getFormerUploadedBankData}`, bearerToken, "GET");
       if (response.status === 200) {
-        setRows(Array.isArray(response.data) ? response.data : []);
+        if(Array.isArray(response.data) && response.data.length > 0)
+          setRows(Array.isArray(response.data) ? response.data : []);
+        else 
+          toast("No records found", { type: "success" });  
       } else if (response.status === 401) {
         toast("Unauthorized", { type: "error" });
         navigate("/logout", { replace: true });
@@ -40,15 +46,16 @@ const FormerUploadedBankData: React.FC = () => {
       toast("Some error occurred", { type: "error" });
     } finally {
       setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleDownload = async (row: Record<string, any>) => {
     console.log("Download row:", row);
-    // call download API using row.AFSID or dynamic key
     setLoading(true);
+    setIsLoading(true);
     try {
-      const res = await apiCall<Blob>(getDownloadFiles, "", "GET", undefined, "blob");
+      const res = await apiCall<Blob>(getDownloadFiles, bearerToken, "GET", undefined, "blob");
       if (res.isBlob && res.data instanceof Blob) {
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
@@ -61,6 +68,7 @@ const FormerUploadedBankData: React.FC = () => {
       toast("Some Error occurred", { type: "error", position: "top-right" });
     } finally {
       setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -87,44 +95,59 @@ const FormerUploadedBankData: React.FC = () => {
   };
 
   return (
-    <div className="application-preview form">
-      <h5 className="mb-3">Uploaded Bank Data</h5>
-      <DataTable
-        value={rows}
-        loading={loading}
-        paginator
-        rows={10}
-        rowsPerPageOptions={[10, 25, 50, 100]}
-        scrollable
-        stripedRows
-        showGridlines
-        emptyMessage="No records found"
-      >
-        {dynamicColumns.map((col) => (
-          <Column
-            key={col.field}
-            field={col.field}
-            header={col.header}
-            sortable={col.sortable}
-            body={bodyTemplate}
-          />
-        ))}
-
-        {/* Action Column */}
-        <Column
-          header="Loading"
-          body={(rowData) => (
-            <Button
-              label="Download"
-              icon="pi pi-download"
-              className="p-button-sm p-button-primary"
-              onClick={() => handleDownload(rowData)}
+    <>
+      {isLoading && (
+        <>
+          {" "}
+          <div className="loader">
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </>
+      )}
+      <div className="application-preview form">
+        <h5 className="mb-3">Uploaded Bank Data</h5>
+        <DataTable
+          value={rows}
+          loading={loading}
+          paginator
+          rows={10}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          scrollable
+          stripedRows
+          showGridlines
+          emptyMessage="No records found"
+        >
+          {dynamicColumns.map((col) => (
+            <Column
+              key={col.field}
+              field={col.field}
+              header={col.header}
+              sortable={col.sortable}
+              body={bodyTemplate}
             />
-          )}
-          style={{ minWidth: "140px" }}
-        />
-      </DataTable>
-    </div>
+          ))}
+
+          {/* Action Column */}
+          <Column
+            header=""
+            body={(rowData) => (
+              <Button
+                label="Download"
+                icon="pi pi-download"
+                className="p-button-sm p-button-primary"
+                onClick={() => handleDownload(rowData)}
+              />
+            )}
+            style={{ minWidth: "140px" }}
+          />
+        </DataTable>
+      </div>
+    </>
   );
 };
 
