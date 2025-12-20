@@ -29,7 +29,7 @@ const Header: React.FC = () => {
        <div className="row align-items-center ">
       <div className="col-2 col-md-auto text-start">
         {/* <img src={logo} alt="Police Logo" className='logo' /> */}
-         <h6 className="text-center logotext colorwhite" >महाराष्ट्र राज्य शेतकरी सहाय्य योजना</h6>
+         <h6 className="text-center logotext colorwhite" >शेतकरी कर्ज संकट निवारण योजना</h6>
       </div>
       <div className="col text-start">
       
