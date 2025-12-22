@@ -42,6 +42,7 @@ const UploadLoanAccountDetails: React.FC = () => {
             const formData = new FormData();
             formData.append("file", file);
             const response = await apiCall<any>(UploadWaiverExcel, bearerToken, "POST", formData);
+            debugger;
             if (response.status === 200) {
                 const { Message, Data } = response.data;
                 toast(Message, { type: "success" });
@@ -184,7 +185,7 @@ const UploadLoanAccountDetails: React.FC = () => {
                     <p>Please follow the instructions below for uploading loan data.</p>
                     <ul style={{ paddingLeft: "18px" }}>
                         <li>Click "Download Sample Loan Details File" to download the Excel sample file.</li>
-                        <li>File format should be <b>xls</b> or <b>xlsx</b>.</li>
+                        <li>File format should be <b>xlsx</b>.</li>
                         <li>Loan information must be filled as per the provided template.</li>
                         <li>Maximum rows allowed: <b>4000</b>, file size: <b>5 MB</b>.</li>
                         <li>Internet speed should be minimum <b>8 MBPS</b>.</li>
@@ -233,7 +234,7 @@ const UploadLoanAccountDetails: React.FC = () => {
                         <input
                             type="file"
                             className="form-control"
-                            accept=".xls,.xlsx"
+                            accept=".xlsx"
                             onChange={handleFileChange}
                         />
                     </div>
