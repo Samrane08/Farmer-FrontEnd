@@ -135,7 +135,7 @@ const Login = () => {
             </div>
 
             {/* Captcha */}
-            <div className="d-flex justify-content-between my-3">
+            <div className="d-flex justify-content-between my-3 captchatxtwrapp">
               <LoadCanvasTemplate />
               <input
                 type="text"

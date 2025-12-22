@@ -320,6 +320,11 @@ body {
   height: 60px;
   z-index: 5;
 }
+.loginmob svg {
+    position: absolute;
+    right: 9px;
+    top: 10px;
+}
 .vjnt{
   font-size: 2.5rem;
   font-weight: 800;
