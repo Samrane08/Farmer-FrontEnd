@@ -51,11 +51,11 @@ const FormerUploadedBankData: React.FC = () => {
   };
 
   const handleDownload = async (row: Record<string, any>) => {
-    console.log("Download row:", row);
     setLoading(true);
     setIsLoading(true);
     try {
-      const res = await apiCall<Blob>(getDownloadFiles, bearerToken, "GET", undefined, "blob");
+      const query = buildQueryParams({ bankId: row.AFSID });
+      const res = await apiCall<Blob>(`${getDownloadFiles}?${query}`, bearerToken, "GET", undefined, "blob");
       if (res.isBlob && res.data instanceof Blob) {
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");

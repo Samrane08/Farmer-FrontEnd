@@ -100,8 +100,6 @@ interface AadhaarData {
   };
 
   const uploadFile = async () => {
-
-    debugger
   if (!fileToUpload) {
     toast.error("Please upload Aadhaar file");
     return;
