@@ -74,6 +74,8 @@
 }
 .heading{
   color: #fff;
+      text-shadow: 1px 1px #000;
+    font-weight: 900;
 }
 
  .card {
@@ -118,6 +120,8 @@
  }
  .headers{
     background-color: #4f684b;
+    background-color: #2fa57d;
+    background-color: #7dba64;
     padding: 10px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     color: #fff
@@ -146,9 +150,9 @@ body .form-label {
     color: #fff;
     width: 100%;
     padding-left: 15px;
-    border-top: 1px solid #3c9f35;
+    border-top: 1px solid #6cae50;
     padding-top: 4px;
-    background-color: #3c9f35;
+    background-color: #6cae50;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -291,7 +295,7 @@ body {
   text-align: justify;
 }
 .bg{
-   background-image: url(./Images/bggreen01.jpg) ; 
+   background-image: url(./Images/bggreen3.jpg) ; 
     background-repeat: no-repeat;
      background-size: cover; 
     height: 100vh;
@@ -567,7 +571,7 @@ textarea.form-control{
   font-style: normal;
 }
 
-.copyrightlogin {
+/* .copyrightlogin {
     color: #ffffff;
     width: 100%;
     padding-left: 15px;
@@ -577,7 +581,7 @@ textarea.form-control{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+} */
 
 img.mahaitlogo {
     width: 38px;
@@ -682,10 +686,13 @@ header.border-bottom .bg {
 }
 
 .hamburgertagg{
+  cursor: pointer;
     position: absolute;
     z-index: 5;
     top: 7px;
     left: 275px;
+    top: 16px;
+    left: 12px;
 }
 .hamburgertag .hamburger-react div {
     background: #fff !important;
@@ -721,6 +728,8 @@ header.border-bottom .bg {
 .sidebar li a.nav-link:hover {
 background: #3f8cdf;
     color: #fff !important;
+        background: #e0fad5;
+    color: #1e5e04 !important;
 }
 
 .sidebar li a .icon {
@@ -802,6 +811,10 @@ background: #3f8cdf;
         background-color: #3ed6a3 !important;
     color: #ffffff !important;
     border-left: 3px solid #098259;
+
+    background-color: #e0fad5 !important;
+    color: #1e5e04 !important;
+    border-left: 3px solid #305122;
 }
 
 /* Highlight parent menus (soft) */
@@ -809,6 +822,10 @@ background: #3f8cdf;
      background-color: #c1dbf9;
     border-left: 3px solid #3f8cdf;
     border-color: #3f8cdf;
+
+        background-color: #e0fad5;
+    border-left: 3px solid #305122;
+    border-color: #305122;
 }
 
 /* Hover effect

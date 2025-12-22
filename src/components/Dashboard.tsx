@@ -55,11 +55,11 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="container-fluid">
-      <div className="text-center mt-3">
+      {/* <div className="text-center mt-3">
         <h3>
           Test (delete later): FullName: {fullName} | RoleId: {roleId} | BankId: {bankId} | DistrictId: {districtId}
         </h3>
-      </div>
+      </div> */}
 
       <div className="row justify-content-center align-items-center mt-3">
         <StatCard title="Expected Loan Amount" value={54470} className="bggblue" />

@@ -45,17 +45,20 @@ const Header: React.FC = () => {
     <header className="headers mb-8 px-3">
       <div className="row align-items-center ">
         <div className="col-2 col-md-auto text-start">
-          <h6 className="text-center logotext colorwhite" >शेतकरी कर्ज संकट निवारण योजना</h6>
+        <div className="d-flex align-items-center ps-5">
+           <h6 className="logotext colorwhite mb-0">{bankName}</h6>
+          <h6 className="logotext colorwhite mb-0">( {userName} )</h6>
+        </div>
         </div>
         <div className="col text-start">
+            <h2 className="text-center logotext colorwhite" >शेतकरी कर्ज संकट निवारण योजना</h2>
         </div>
         {/* BANK + USER together */}
         <div className="col-md-auto d-flex align-items-center gap-1">
-          <h6 className="logotext colorwhite mb-0">{bankName}</h6>
-          <h6 className="logotext colorwhite mb-0">( {userName} )</h6>
+         
         </div>
         <div className="col-auto text-end">
-          <button onClick={handleLogout} className='btn btn-warning btn-sm'>
+          <button onClick={handleLogout} className='btn btn-light btn-sm'>
             Logout
           </button>
         </div>
