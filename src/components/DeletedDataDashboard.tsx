@@ -49,6 +49,7 @@ const DeletedDataDashboard: React.FC = () => {
     getDeletedBankData();
   }, [pageNo, pageSize]);
   const getDeletedBankData = async () => {
+    
     setIsLoading(true);
     setLoading(true);
     try {
@@ -112,7 +113,7 @@ const DeletedDataDashboard: React.FC = () => {
         const url = window.URL.createObjectURL(res.data);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "DeletedBankData.xlsx";
+        link.download = "DeletedBankData.zip";
         link.click();
         window.URL.revokeObjectURL(url);
       }
@@ -151,7 +152,7 @@ const DeletedDataDashboard: React.FC = () => {
             disabled={loading || totalCount === 0}
           />
         </div>
-        <h5 className="mb-3">Uploaded Bank Data</h5>
+        {/* <h5 className="mb-3">Uploaded Bank Data</h5> */}
         <DataTable
           value={rows}
           loading={loading}

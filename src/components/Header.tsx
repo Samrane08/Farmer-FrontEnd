@@ -12,12 +12,15 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const bearerToken = useSelector((state: RootState) => state.authenticate.token);
-  let fullName = "N/A";
+  let bankName = "";
+  let userName = "";
 
   if (bearerToken) {
     try {
+      debugger
       const decoded = parseToken(bearerToken);
-      fullName = decoded.Name;
+      bankName = decoded.BankName;
+      userName = decoded.UserName;
     } catch (err) {
       console.error("Failed to decode token:", err);
     }
@@ -41,19 +44,15 @@ const Header: React.FC = () => {
   return (
     <header className="headers mb-8 px-3">
       <div className="row align-items-center ">
-        <div className="col-2 col-md-auto">
-          {/* <img src={logo} alt="Police Logo" className='logo' /> */}
-          <h6 className="text-center logotext colorwhite" >{fullName}</h6>
-        </div>
-        <div className="col-1 text-start">
-        </div>
-        <div className="col d-flex justify-content-center">
-          {/* <img src={logo} alt="Police Logo" className='logo' /> */}
+        <div className="col-2 col-md-auto text-start">
           <h6 className="text-center logotext colorwhite" >शेतकरी कर्ज संकट निवारण योजना</h6>
         </div>
-        <div className="col-2 col-md-auto text-start">
-          {/* <img src={logo} alt="Police Logo" className='logo' /> */}
-          <h6 className="text-center logotext colorwhite" >UserName</h6>
+        <div className="col text-start">
+        </div>
+        {/* BANK + USER together */}
+        <div className="col-md-auto d-flex align-items-center gap-1">
+          <h6 className="logotext colorwhite mb-0">{bankName}</h6>
+          <h6 className="logotext colorwhite mb-0">( {userName} )</h6>
         </div>
         <div className="col-auto text-end">
           <button onClick={handleLogout} className='btn btn-warning btn-sm'>
