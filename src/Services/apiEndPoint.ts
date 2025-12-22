@@ -9,8 +9,8 @@ export const getDownloadFiles = "fv_farmer-service/api/FormerUploadedBankData/ba
 export const searchUploadedBankData = "fv_farmer-service/api/FarmerUpload/SearchFarmer";
 export const deleteUploadedBankData = "fv_farmer-service/api/FarmerUpload/DeleteFarmerRecord";
 
-export const getDeletedBankDataResponse = "api/FarmerDelete/bank-deleted-data";
-export const DownloadDeletedDataDashboard = "api/FarmerDelete/dynamic-excel-deleted";
+export const getDeletedBankDataResponse = "fv_farmer-service/api/FarmerDelete/bank-deleted-data";
+export const DownloadDeletedDataDashboard = "fv_farmer-service/api/FarmerDelete/dynamic-excel-deleted";
 
 export const DownloadIFSCCode = "fv_farmer-service/api/IFSCCode/download-ifsc";
 export const DownloadPACS = "fv_farmer-service/api/IFSCCode/download-pacs";
