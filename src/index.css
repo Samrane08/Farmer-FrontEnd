@@ -238,6 +238,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
    background-color: #fff;
+   background-color: #e8e8e8;
 }
 
 /* .btn-outline-warning {
@@ -1172,10 +1173,28 @@ fieldset.formApllication.strip:nth-child(even) {
   background-color: #F7D162;
   color: #fff;
 }
+.bggyellow h2{
+  color: #fff;
+  font-size: 2.5rem;
+}
+.bggyellow .bi{
+  color: #fff;
+  font-size: 2.8rem;
+  line-height: 1;
+}
 .bggcyan{
   background-color: #74D1E4;
   color: #fff;
 } 
+.bggcyan h2{
+  color: #fff;
+  font-size: 2.5rem;
+}
+.bggcyan .bi{
+  color: #fff;
+  font-size: 2.8rem;
+  line-height: 1;
+}
 .bggpurple{
   background-color: #D3AAF6;
   color: #fff;

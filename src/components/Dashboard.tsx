@@ -76,6 +76,47 @@ const Dashboard: React.FC = () => {
           iconRight="bi bi-hourglass-top"
         />
       </div>
+
+        <div className="row justify-content-start align-items-center mt-3">
+<div className="col-12 col-md-4 mb-4">
+    <div className="card bggyellow">
+      <div className="card-body">
+        <h5 className="card-title">Demographics Accounts</h5>
+
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            {/* <i className="bi bi-currency-rupee"></i> */}
+           <i className="bi bi-pie-chart-fill"></i>
+
+          
+          </div>
+          <h2 className="card-text"></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="col-12 col-md-4 mb-4">
+    <div className="card bggcyan">
+      <div className="card-body">
+        <h5 className="card-title">Non-Demographics Accounts</h5>
+
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            {/* <i className="bi bi-currency-rupee"></i> */}
+           <i className="bi bi-pie-chart-fill"></i>
+            <i
+                className="bi bi-x-circle"
+                style={{ marginLeft: "2px", fontSize: "1rem" }}
+              ></i>
+          </div>
+          <h2 className="card-text"></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        </div>
     </div>
   );
 };
