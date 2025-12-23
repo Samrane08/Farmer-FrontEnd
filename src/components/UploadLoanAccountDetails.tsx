@@ -42,7 +42,6 @@ const UploadLoanAccountDetails: React.FC = () => {
             const formData = new FormData();
             formData.append("file", file);
             const response = await apiCall<any>(UploadWaiverExcel, bearerToken, "POST", formData);
-            debugger;
             if (response.status === 200) {
                 const { Message, Data } = response.data;
                 toast(Message, { type: "success" });
