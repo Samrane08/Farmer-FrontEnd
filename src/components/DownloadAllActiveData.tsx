@@ -6,12 +6,13 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { apiCall, buildQueryParams } from "../Services/api";
-import { getDownloadFiles, getFormerUploadedBankData } from "../Services/apiEndPoint";
+import { apiCall } from "../Services/api";
+import { getActiveData } from "../Services/apiEndPoint";
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { exportToExcel } from "../Services/exportToExcel";
 
 const DownloadAllActiveData: React.FC = () => {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ const DownloadAllActiveData: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rows, setRows] = useState<Record<string, any>[]>([]);
-  const hiddenColumns = ["AFSID"];
-  const sortableColumns = ["Bank_Name", "User_FileName"];
+  const hiddenColumns = ["BRID", "BankId", "DistrictCode", "TalukaCode", "VillageCode", "CreatedBy", "CreatedOn", "ModifyBy", "ModifyOn", "IsActive"];
+  const sortableColumns = ["AadharNo", "PACSMembershipNo", "FarmerName"];
 
   useEffect(() => {
     fetchData();
@@ -30,12 +31,12 @@ const DownloadAllActiveData: React.FC = () => {
     setLoading(true);
     setIsLoading(true);
     try {
-      const response = await apiCall<any>(`${getFormerUploadedBankData}`, bearerToken, "GET");
+      const response = await apiCall<any>(`${getActiveData}`, bearerToken, "GET");
       if (response.status === 200) {
-        if(Array.isArray(response.data) && response.data.length > 0)
-          setRows(Array.isArray(response.data) ? response.data : []);
-        else 
-          toast("No records found", { type: "success" });  
+        if (Array.isArray(response?.data?.Data) && response?.data?.Data?.length > 0)
+          setRows(Array.isArray(response?.data?.Data) ? response?.data?.Data : []);
+        else
+          toast("No records found", { type: "success" });
       } else if (response.status === 401) {
         toast("Unauthorized", { type: "error" });
         navigate("/logout", { replace: true });
@@ -50,19 +51,33 @@ const DownloadAllActiveData: React.FC = () => {
     }
   };
 
-  const handleDownload = async (row: Record<string, any>) => {
+  const handleDownload = async () => {
     setLoading(true);
     setIsLoading(true);
     try {
-      const query = buildQueryParams({ bankId: row.AFSID });
-      const res = await apiCall<Blob>(`${getDownloadFiles}?${query}`, bearerToken, "GET", undefined, "blob");
-      if (res.isBlob && res.data instanceof Blob) {
-        const url = window.URL.createObjectURL(res.data);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "BankData.zip";
-        link.click();
-        window.URL.revokeObjectURL(url);
+      const res = await apiCall<any>(`${getActiveData}`, bearerToken, "GET");
+      if (res.status === 200) {
+        const arrHeaders: string[] = [];
+        const resp = res?.data?.Data;
+        for (var key in resp[0]) {
+          if (key.length > 0) {
+            try {
+              arrHeaders.push(key.replace(/([A-Z])/g, " $&").trim());
+            } catch (error) {
+              arrHeaders.push(key);
+            }
+          }
+        }
+        const Headers: any[] = [];
+        Headers.push(arrHeaders);
+        setIsLoading(false);
+        setLoading(false);
+        const cuurentDate = new Date();
+        const month = cuurentDate.getMonth() + 1;
+        const year = cuurentDate.getFullYear();
+        const date = cuurentDate.getDate();
+        const today = `${date}-${month}-${year}`;
+        exportToExcel(res?.data?.Data, `Active_Bank_Data_${today}`, Headers);
       }
     } catch {
       toast("Some Error occurred", { type: "error", position: "top-right" });
@@ -110,7 +125,16 @@ const DownloadAllActiveData: React.FC = () => {
         </>
       )}
       <div className="application-preview form">
-        <h5 className="mb-3">Uploaded Bank Data</h5>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="mb-0">Download All Active Data</h5>
+          <Button
+            label="Download File"
+            icon="pi pi-download"
+            className="p-button-success"
+            onClick={handleDownload}
+            disabled={loading}
+          />
+        </div>
         <DataTable
           value={rows}
           loading={loading}
@@ -131,20 +155,6 @@ const DownloadAllActiveData: React.FC = () => {
               body={bodyTemplate}
             />
           ))}
-
-          {/* Action Column */}
-          <Column
-            header=""
-            body={(rowData) => (
-              <Button
-                label="Download"
-                icon="pi pi-download"
-                className="p-button-sm p-button-primary"
-                onClick={() => handleDownload(rowData)}
-              />
-            )}
-            style={{ minWidth: "140px" }}
-          />
         </DataTable>
       </div>
     </>

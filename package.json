@@ -32,6 +32,8 @@
     "framer-motion": "^11.2.10",
     "hamburger-react": "^2.5.1",
     "i18next": "^23.11.5",
+    "jspdf": "^3.0.4",
+    "jspdf-autotable": "^5.0.2",
     "jwt-decode": "^4.0.0",
     "md5": "^2.3.0",
     "moment": "^2.30.1",

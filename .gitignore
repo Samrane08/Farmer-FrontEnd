@@ -34,4 +34,3 @@ node_modules\.cache
 
 /.vs
 
-/src/Services/globalEnv.ts

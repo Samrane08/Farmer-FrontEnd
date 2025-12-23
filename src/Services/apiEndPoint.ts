@@ -17,3 +17,6 @@ export const DownloadPACS = "fv_farmer-service/api/IFSCCode/download-pacs";
 
 //Upload Loan Account Details
 export const UploadWaiverExcel = "fv_farmer-service/api/WaiverBankFileUpload/upload-waiver-excel";
+
+//DownloadAllActiveData
+export const getActiveData = "fv_farmer-service/api/DownloadActiveData/GetActiveData";
