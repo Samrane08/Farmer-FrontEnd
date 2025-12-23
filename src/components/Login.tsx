@@ -101,19 +101,20 @@ const Login = () => {
                   className="enb"
                   style={{ width: "40px" }}
                 />
-                  <span style={{fontSize: "10px",marginLeft: "8px"}}>
+                
                 <img
                   src={sg}
                   alt=""
                   className="sg ms-lg-1"
-                  style={{ width: "65px", display: "block" }}
+                  style={{ width: "65px" }}
                 />
-                 महाराष्ट्र शासन
-                </span>
          </div>
-                <h1 className="text-center m-0 pt-4 heading">
+               <div>
+                 <h1 className="text-center m-0 pt-4 heading">
           शेतकरी कर्ज संकट निवारण योजना
         </h1>
+            <h3 className="text-center m-0 heading m-0 p-0">  महाराष्ट्र शासन</h3>
+               </div>
         </div>
         <div className="auth-box mt-5">
           <h2 className="my-4 mt-0">Login</h2>

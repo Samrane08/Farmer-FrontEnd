@@ -55,21 +55,20 @@ const Header: React.FC = () => {
                   className="enb"
                   style={{ width: "30px" }}
                 />
-               <span style={{fontSize: "10px",marginLeft: "8px"}}>
-                 <img
+                <img
                   src={sg}
                   alt=""
                   className="sg ms-lg-1"
-                  style={{ width: "52px", display: "block" }}
+                  style={{ width: "52px" }}
                 />
-                महाराष्ट्र शासन
-               </span>
+                
            <h6 className="logotext colorwhite mb-0 ms-3">{bankName}</h6>
           <h6 className="logotext colorwhite mb-0">( {userName} )</h6>
         </div>
         </div>
         <div className="col text-start">
-            <h2 className="text-center logotext colorwhite" >शेतकरी कर्ज संकट निवारण योजना</h2>
+            <h2 className="text-center logotext colorwhite m-0 p-0" >शेतकरी कर्ज संकट निवारण योजना</h2>
+            <p className="text-center  colorwhite m-0 p-0" style={{ fontSize: "1rem", fontWeight: "bold"  }}>  महाराष्ट्र शासन</p>
         </div>
         {/* BANK + USER together */}
         <div className="col-md-auto d-flex align-items-center gap-1">
