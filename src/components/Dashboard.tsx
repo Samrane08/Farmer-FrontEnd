@@ -21,9 +21,10 @@ const StatCard: React.FC<{
             {iconRight && (
               <i
                 className={iconRight}
-                style={{ marginLeft: "-12px", fontSize: "2rem" }}
+                
               ></i>
             )}
+            {/* style={{ marginLeft: "-12px", fontSize: "2rem" }} */}
           </div>
           <h2 className="card-text">{value}</h2>
         </div>
