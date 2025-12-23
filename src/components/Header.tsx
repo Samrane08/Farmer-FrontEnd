@@ -55,12 +55,15 @@ const Header: React.FC = () => {
                   className="enb"
                   style={{ width: "30px" }}
                 />
-                <img
+               <span style={{fontSize: "10px",marginLeft: "8px"}}>
+                 <img
                   src={sg}
                   alt=""
                   className="sg ms-lg-1"
-                  style={{ width: "52px" }}
+                  style={{ width: "52px", display: "block" }}
                 />
+                महाराष्ट्र शासन
+               </span>
            <h6 className="logotext colorwhite mb-0 ms-3">{bankName}</h6>
           <h6 className="logotext colorwhite mb-0">( {userName} )</h6>
         </div>
