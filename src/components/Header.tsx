@@ -17,7 +17,6 @@ const Header: React.FC = () => {
 
   if (bearerToken) {
     try {
-      debugger
       const decoded = parseToken(bearerToken);
       bankName = decoded.BankName;
       userName = decoded.UserName;

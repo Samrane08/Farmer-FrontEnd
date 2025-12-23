@@ -46,8 +46,6 @@ export async function postOfflineExistingApplicant(filePath: string, aadharNo: a
     aadhaarData: aadharNo,
     FilePath: filePath,
   };
-  debugger;
-  console.log(initValues);
   const config: AxiosRequestConfig = {
     method: 'POST',
     url: `${globalURL}farmer-service/api/FarmerUpload/ExistingAadharData`,
@@ -225,7 +223,6 @@ export async function deleteOfflineExistingId(Id: any, hostelID: any, bearerToke
 }
 
 export async function DownloadIFSCCode(bearerToken: string): Promise<string> {
-  debugger;
   const config: AxiosRequestConfig = {
     method: 'POST',
     url: `${globalURL}fv_farmer-service/api/IFSCCode/downloadIFSCCode`,
