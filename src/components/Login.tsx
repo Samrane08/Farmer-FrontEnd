@@ -15,6 +15,9 @@ import { useAppDispatch } from "../store/hook";
 import { setToken } from "../store/features/authenticationSlice";
 import mahaitlogo from "../Images/Maha_IT_LogoB.png";
 
+import emblemLogo from "../Images/emblemLogo.png";
+import sg from "../Images/maharashtralogo.png";
+
 const portalLoginSchema = Yup.object().shape({
   UserName: Yup.string().required("Username is required"),
   Password: Yup.string().required("Password is required"),
@@ -87,11 +90,28 @@ const Login = () => {
 
   return (
     <div className="bg">
+    
       <div className="loginmob">
-        <h1 className="text-center m-0 pt-4 heading">
+        
+   <div className="d-flex justify-content-center align-items-center ps-2 pt-3 position-relative">
+         <div style={{position: "absolute", left: "10px"}}>
+            <img
+                  src={emblemLogo}
+                  alt=""
+                  className="enb"
+                  style={{ width: "40px" }}
+                />
+                <img
+                  src={sg}
+                  alt=""
+                  className="sg ms-lg-1"
+                  style={{ width: "65px" }}
+                />
+         </div>
+                <h1 className="text-center m-0 pt-4 heading">
           शेतकरी कर्ज संकट निवारण योजना
         </h1>
-
+        </div>
         <div className="auth-box mt-5">
           <h2 className="my-4 mt-0">Login</h2>
 
