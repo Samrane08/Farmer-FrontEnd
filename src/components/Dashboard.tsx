@@ -18,7 +18,6 @@ const StatCard: React.FC<{
 
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <i className="bi bi-currency-rupee"></i>
             {iconRight && (
               <i
                 className={iconRight}
@@ -62,15 +61,15 @@ const Dashboard: React.FC = () => {
       </div> */}
 
       <div className="row justify-content-center align-items-center mt-3">
-        <StatCard title="Expected Loan Amount" value={54470} className="bggblue" />
+        <StatCard title="Expected Loan Acounts" value={54470} className="bggblue" />
         <StatCard
-          title="Uploaded Loan Amount"
+          title="Uploaded Loan Acounts"
           value={54145}
           className="bggreen"
           iconRight="bi bi-cloud-upload-fill"
         />
         <StatCard
-          title="Pending Loan Amount"
+          title="Pending Loan Acounts"
           value={325}
           className="bggorange"
           iconRight="bi bi-hourglass-top"
@@ -90,8 +89,9 @@ const Dashboard: React.FC = () => {
 
           
           </div>
-          <h2 className="card-text"></h2>
+          <h2 className="card-text">51000</h2>
         </div>
+        
       </div>
     </div>
   </div>
@@ -109,8 +109,9 @@ const Dashboard: React.FC = () => {
                 className="bi bi-x-circle"
                 style={{ marginLeft: "2px", fontSize: "1rem" }}
               ></i>
+              
           </div>
-          <h2 className="card-text"></h2>
+          <h2 className="card-text">3145</h2>
         </div>
       </div>
     </div>
