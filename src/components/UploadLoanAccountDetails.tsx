@@ -21,7 +21,7 @@ const UploadLoanAccountDetails: React.FC = () => {
     const [rows, setRows] = useState<Record<string, any>[]>([]);
     const hiddenColumns = ["AFSID"];
     const sortableColumns = ["Bank_Name", "User_FileName"];
-    const visibleColumns = ["SrNo", "Response"];
+    const visibleColumns = ["SrNo", "Response","Checksum"];
 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
