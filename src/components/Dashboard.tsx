@@ -50,7 +50,6 @@ const Dashboard: React.FC = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      debugger
       const response = await apiCall<any>(`${getDashboardData}`, bearerToken, "GET");
       if (response.status === 200) {
         if (Array.isArray(response?.data?.Data) && response?.data?.Data?.length > 0)

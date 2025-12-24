@@ -81,6 +81,5 @@ export const exportToPDF = (
     columnStyles,
     theme: 'grid',
   });
-  //debugger;
   doc.save(`${fileName}.pdf`);
 };

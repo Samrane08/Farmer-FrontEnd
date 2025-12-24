@@ -36,7 +36,7 @@ const Header: React.FC = () => {
   };
 
   // Hide header if on login page regardless of login state
-  if (location.pathname === "/login") {
+  if (location.pathname === "/") {
     return null;
   }
 

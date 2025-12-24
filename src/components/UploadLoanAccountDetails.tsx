@@ -21,7 +21,7 @@ const UploadLoanAccountDetails: React.FC = () => {
     const [rows, setRows] = useState<Record<string, any>[]>([]);
     const hiddenColumns = ["AFSID"];
     const sortableColumns = ["Bank_Name", "User_FileName"];
-    const visibleColumns = ["SrNo", "Response","Checksum"];
+    const visibleColumns = ["SrNo", "Response", "Checksum"];
 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,24 +41,29 @@ const UploadLoanAccountDetails: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append("file", file);
+            debugger
             const response = await apiCall<any>(UploadWaiverExcel, bearerToken, "POST", formData);
             if (response.status === 200) {
-                const { Message, Data } = response.data;
-                toast(Message, { type: "success" });
-                // ✅ CASE 1: Success message – DO NOT set rows
-                if ((Array.isArray(Data) && Data[0]?.Response === "SUCCESS")) {
-                    setRows([]); // optional: clear table
-                    return;
-                }
+                if (response?.data?.Status) {
+                    const { Message, Data } = response?.data?.Results;
+                    toast(Message, { type: "success" });
+                    // ✅ CASE 1: Success message – DO NOT set rows
+                    if ((Array.isArray(Data) && Data[0]?.Response === "SUCCESS")) {
+                        setRows([]); // optional: clear table
+                        return;
+                    }
 
-                // ❌ CASE 2: Validation / error rows – show in table
-                if (Array.isArray(Data)) {
-                    const filteredRows = Data.filter(
-                        (row) => row?.Response !== "SUCCESS"
-                    );
-                    setRows(filteredRows);
+                    // ❌ CASE 2: Validation / error rows – show in table
+                    if (Array.isArray(Data)) {
+                        const filteredRows = Data.filter(
+                            (row) => row?.Response !== "SUCCESS"
+                        );
+                        setRows(filteredRows);
+                    } else {
+                        setRows([]);
+                    }
                 } else {
-                    setRows([]);
+                    toast(response?.data?.Message, { type: "success" });
                 }
             } else if (response.status === 401) {
                 toast("Unauthorized", { type: "error" });
