@@ -20,3 +20,6 @@ export const UploadWaiverExcel = "fv_farmer-service/api/WaiverBankFileUpload/upl
 
 //DownloadAllActiveData
 export const getActiveData = "fv_farmer-service/api/DownloadActiveData/GetActiveData";
+
+//DashBoard
+export const getDashboardData = "fv_farmer-service/api/Dashboard";

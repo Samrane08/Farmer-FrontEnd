@@ -63,6 +63,8 @@ const UploadLoanAccountDetails: React.FC = () => {
             } else if (response.status === 401) {
                 toast("Unauthorized", { type: "error" });
                 navigate("/logout", { replace: true });
+            } else if (response.status === 400) {
+                toast(response.data.message, { type: "success" });
             } else {
                 toast("Failed to load data", { type: "error" });
             }
