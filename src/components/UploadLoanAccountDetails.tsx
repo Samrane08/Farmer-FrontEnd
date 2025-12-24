@@ -41,30 +41,46 @@ const UploadLoanAccountDetails: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append("file", file);
-            debugger
             const response = await apiCall<any>(UploadWaiverExcel, bearerToken, "POST", formData);
             if (response.status === 200) {
-                if (response?.data?.Status) {
-                    const { Message, Data } = response?.data?.Results;
-                    toast(Message, { type: "success" });
-                    // ✅ CASE 1: Success message – DO NOT set rows
-                    if ((Array.isArray(Data) && Data[0]?.Response === "SUCCESS")) {
-                        setRows([]); // optional: clear table
-                        return;
-                    }
+                const { Message, Data } = response.data;
 
-                    // ❌ CASE 2: Validation / error rows – show in table
-                    if (Array.isArray(Data)) {
-                        const filteredRows = Data.filter(
-                            (row) => row?.Response !== "SUCCESS"
-                        );
-                        setRows(filteredRows);
-                    } else {
-                        setRows([]);
-                    }
-                } else {
-                    toast(response?.data?.Message, { type: "success" });
+                toast(Message, { type: "success" });
+
+                // Safely extract Results array
+                const results = Array.isArray(Data?.Results) ? Data.Results : [];
+
+                // Filter rows where Response is NOT "SUCCESS"
+                const errorRows = results.filter(
+                    (row : any) => row?.Response !== "SUCCESS"
+                );
+
+                // If only SUCCESS rows exist → clear table
+                if (errorRows.length === 0) {
+                    setRows([]);
+                    return;
                 }
+
+                // Otherwise show error/validation rows
+                setRows(errorRows);
+
+                // const { Message, Data } = response.data;
+                // toast(Message, { type: "success" });
+                // // ✅ CASE 1: Success message – DO NOT set rows
+                // if ((Array.isArray(Data) && Data[0]?.Response === "SUCCESS")) {
+                //     setRows([]); // optional: clear table
+                //     return;
+                // }
+
+                // // ❌ CASE 2: Validation / error rows – show in table
+                // if (Array.isArray(Data)) {
+                //     const filteredRows = Data.filter(
+                //         (row) => row?.Response !== "SUCCESS"
+                //     );
+                //     setRows(filteredRows);
+                // } else {
+                //     setRows([]);
+                // }
             } else if (response.status === 401) {
                 toast("Unauthorized", { type: "error" });
                 navigate("/logout", { replace: true });
