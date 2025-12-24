@@ -193,7 +193,7 @@ const UploadLoanAccountDetails: React.FC = () => {
                         <li>Download result file for failed records.</li>
                         <li>
                             File name should contain only English alphabets, numbers, underscores
-                            and extension xls/xlsx.
+                            and extension xlsx.
                         </li>
                         <li>
                             Upload deceased case data in a separate file. Do not mix cases.
