@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { saveAs } from 'file-saver';
-import ExcelFile from '../asset/files/SampleLoanDetailsFile.xlsx';
+import ExcelFile from '../asset/files/SampleWaiverLoanDetailsFile55Cols.xlsx';
 
 const UploadLoanAccountDetails: React.FC = () => {
     const navigate = useNavigate();
@@ -98,7 +98,7 @@ const UploadLoanAccountDetails: React.FC = () => {
     };
 
     const handleDownload = () => {
-        saveAs(ExcelFile, 'SampleLoanDetailsFile.xlsx');
+        saveAs(ExcelFile, 'SampleWaiverLoanDetailsFile55Cols.xlsx');
     };
 
     const downloadFiles = async () => {
