@@ -22,6 +22,8 @@ const UploadLoanAccountDetails: React.FC = () => {
     const hiddenColumns = ["AFSID"];
     const sortableColumns = ["Bank_Name", "User_FileName"];
     const visibleColumns = ["SrNo", "Response", "Checksum"];
+    const [summary, setSummary] = useState<any | null>(null);
+
 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +49,7 @@ const UploadLoanAccountDetails: React.FC = () => {
 
                 toast(Message, { type: "success" });
 
+                setSummary(Data?.Summary ?? null);
                 // Safely extract Results array
                 const results = Array.isArray(Data?.Results) ? Data.Results : [];
 
@@ -174,6 +177,14 @@ const UploadLoanAccountDetails: React.FC = () => {
         const value = rowData[column.field];
         return value !== null && value !== undefined ? value : "-";
     };
+
+    const summaryColumns = [
+        { field: "TotalRecords", header: "Total Records" },
+        { field: "TotalSuccess", header: "Total Success" },
+        { field: "TotalFailed", header: "Total Failed" },
+        { field: "TotalAmount", header: "Total Amount" }
+    ];
+
     return (
         <>
             {isLoading && (
@@ -248,6 +259,8 @@ const UploadLoanAccountDetails: React.FC = () => {
                         />
                     </div>
                 </div>
+                
+                
 
                 {/* Upload Section */}
                 <div className="row align-items-center">
@@ -271,6 +284,28 @@ const UploadLoanAccountDetails: React.FC = () => {
                     </div>
                 </div>
 
+                {summary && (
+                    <div className="mb-4">
+                        <h6 className="mb-2">Upload Summary</h6>
+
+                        <DataTable
+                            value={[summary]}   //  single-row table
+                            showGridlines
+                            stripedRows
+                            responsiveLayout="scroll"
+                        >
+                            {summaryColumns.map(col => (
+                                <Column
+                                    key={col.field}
+                                    field={col.field}
+                                    header={col.header}
+                                />
+                            ))}
+                        </DataTable>
+                    </div>
+                )}
+
+                <h6 className="mb-2">Failed Record Details</h6>
                 <DataTable
                     value={rows}
                     loading={isLoading}
