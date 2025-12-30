@@ -23,8 +23,13 @@ const UploadLoanAccountDetails: React.FC = () => {
     const sortableColumns = ["Bank_Name", "User_FileName"];
     const visibleColumns = ["SrNo", "Response", "Checksum"];
     const [summary, setSummary] = useState<any | null>(null);
+    const [showValidationModal, setShowValidationModal] = useState(false);
+    const [validationMessage, setValidationMessage] = useState("");
 
-
+    const openValidationModal = (message: string) => {
+        setValidationMessage(message);
+        setShowValidationModal(true);
+    };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -45,9 +50,19 @@ const UploadLoanAccountDetails: React.FC = () => {
             formData.append("file", file);
             const response = await apiCall<any>(UploadWaiverExcel, bearerToken, "POST", formData);
             if (response.status === 200) {
-                const { Message, Data } = response.data;
+                const { Status, Message, Data } = response.data;
 
-                toast(Message, { type: "success" });
+                if (Status === true && Data?.Summary?.TotalSuccess > 0) {
+                    toast(Message, { type: "success" });
+                    // normal success flow
+                } 
+                else if (Status === true && Data?.Summary?.TotalSuccess === 0) {
+                    openValidationModal("File uploaded successfully but no records were successfully processed.\nPlease review the details below.");
+                }
+                else {
+                    // SHOW POPUP (blocking, scrollable)
+                    openValidationModal(Message);
+                }
 
                 setSummary(Data?.Summary ?? null);
                 // Safely extract Results array
@@ -328,6 +343,26 @@ const UploadLoanAccountDetails: React.FC = () => {
                     ))}
                 </DataTable>
             </div>
+            {showValidationModal && (
+                <div className="modal-backdrop">
+                    <div className="modal-container">
+                        <h4>Error(s)</h4>
+
+                        <div className="validation-message">
+                            {validationMessage}
+                        </div>
+                        <br />
+                        <div className="modal-footer">
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setShowValidationModal(false)}
+                            >
+                                Understood
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
