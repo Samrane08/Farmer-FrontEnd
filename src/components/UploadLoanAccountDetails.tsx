@@ -332,14 +332,16 @@ const UploadLoanAccountDetails: React.FC = () => {
                     showGridlines
                     emptyMessage="No records found"
                 >
-                    {dynamicColumns.map((col) => (
-                        <Column
-                            key={col.field}
-                            field={col.field}
-                            header={col.header}
-                            sortable={col.sortable}
-                            body={bodyTemplate}
-                        />
+                    {dynamicColumns
+                        .filter(col => col.field !== "Checksum")
+                        .map((col) => (
+                            <Column
+                                key={col.field}
+                                field={col.field}
+                                header={col.header}
+                                sortable={col.sortable}
+                                body={bodyTemplate}
+                            />
                     ))}
                 </DataTable>
             </div>
