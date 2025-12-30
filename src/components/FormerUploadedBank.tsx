@@ -54,7 +54,7 @@ const FormerUploadedBankData: React.FC = () => {
     setLoading(true);
     setIsLoading(true);
     try {
-      const query = buildQueryParams({ bankId: row.AFSID });
+      const query = buildQueryParams({ fdID: row.AFSID });
       const res = await apiCall<Blob>(`${getDownloadFiles}?${query}`, bearerToken, "GET", undefined, "blob");
       if (res.isBlob && res.data instanceof Blob) {
         const url = window.URL.createObjectURL(res.data);
