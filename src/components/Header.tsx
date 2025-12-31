@@ -49,18 +49,22 @@ const Header: React.FC = () => {
       <div className="row align-items-center ">
         <div className="col-2 col-md-auto text-start">
         <div className="d-flex align-items-center ps-5">
+           <a href="https://www.india.gov.in/" target="_blank" >
            <img
                   src={emblemLogo}
                   alt=""
                   className="enb"
                   style={{ width: "30px" }}
                 />
+                </a>
+                  <a href="https://www.maharashtra.gov.in" target="_blank" >
                 <img
                   src={sg}
                   alt=""
                   className="sg ms-lg-1"
                   style={{ width: "52px" }}
                 />
+                </a>
                 
            <h6 className="logotext colorwhite mb-0 ms-3">{bankName}</h6>
           <h6 className="logotext colorwhite mb-0">( {userName} )</h6>
