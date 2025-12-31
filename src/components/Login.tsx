@@ -95,19 +95,23 @@ const Login = () => {
         
    <div className="d-flex justify-content-center align-items-center ps-2 pt-3 position-relative">
          <div style={{position: "absolute", left: "10px"}}>
-            <img
+          <a href="https://www.india.gov.in/" target="_blank" >
+             <img
                   src={emblemLogo}
                   alt=""
                   className="enb"
                   style={{ width: "40px" }}
                 />
-                
+          </a>
+           
+                  <a href="https://www.maharashtra.gov.in" target="_blank" >
                 <img
                   src={sg}
                   alt=""
                   className="sg ms-lg-1"
                   style={{ width: "65px" }}
                 />
+                </a>
          </div>
                <div>
                  <h1 className="text-center m-0 pt-4 heading">
@@ -183,7 +187,7 @@ const Login = () => {
       </div>
 
       <div className="text-center copyrightlogin">
-        Copyright © 2025.
+         Copyright © 2025. Design and Developed By MAHAIT.
         <a href="https://mahait.org/" target="_blank" rel="noopener noreferrer">
           <img src={mahaitlogo} alt="MAHAIT Logo" className="mahaitlogo" />
         </a>
