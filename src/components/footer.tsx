@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
         <footer className='footer'>
             <div className='row align-items-center'>
                 <div className='col-12 col-md text-center text-md-start'>
-                Copyright © 2025. Design and Developed By MAHAIT.
+                 Copyright © 2025. Design and Developed By MAHAIT.
                 </div>
                 <div className='col-12 col-md text-end text-md-end'>
                      <a href="https://mahait.org/" target="_blank" rel="noopener noreferrer">

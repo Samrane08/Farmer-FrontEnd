@@ -3,6 +3,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import Footer from "./footer";
 import LeftPannel from "../components/template-parts/leftPannel";
 import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -22,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [showProgressSteps, setShowProgressSteps] = useState(true);
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true); // State for left panel
 
- 
+
 
   useEffect(() => {
 
@@ -36,12 +37,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <>
-     
-    
-        <div>
-          <Header />
-          <main className="d-flex justify-content-start" style={{ marginTop: '-1px' }}>
-            {/* {
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
+      <div>
+        <Header />
+        <main className="d-flex justify-content-start" style={{ marginTop: '-1px' }}>
+          {/* {
               bearerToken !== "" && isAadharVerified && isEmailVerified && isMobileVerified && (
                 <LeftPannel 
                 isOpen={isLeftPanelOpen}
@@ -49,25 +58,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               />
               )
             } */}
-             <LeftPannel 
-                isOpen={isLeftPanelOpen}
-                onToggle={setIsLeftPanelOpen} // Pass the state and setter
-              />
+          <LeftPannel
+            isOpen={isLeftPanelOpen}
+            onToggle={setIsLeftPanelOpen} // Pass the state and setter
+          />
 
-              <div className={`mainContent ${!isLeftPanelOpen ? 'mainContentToggle' : ''}`}>
-              
-              <div className="">
-                <div>
-                  {children}
-                </div>
+          <div className={`mainContent ${!isLeftPanelOpen ? 'mainContentToggle' : ''}`}>
+
+            <div className="">
+              <div>
+                {children}
               </div>
             </div>
+          </div>
 
 
-          </main>
-          <Footer />
-        </div>
-      
+        </main>
+        <Footer />
+      </div>
+
     </>
   );
 };

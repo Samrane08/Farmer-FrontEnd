@@ -15,12 +15,15 @@ import { useAppDispatch } from "../store/hook";
 import { setToken } from "../store/features/authenticationSlice";
 import mahaitlogo from "../Images/Maha_IT_LogoB.png";
 
+import emblemLogo from "../Images/emblemLogo.png";
+import sg from "../Images/maharashtralogo.png";
+
 const portalLoginSchema = Yup.object().shape({
   UserName: Yup.string().required("Username is required"),
   Password: Yup.string().required("Password is required"),
 });
 
-const Login = () => {
+const LoginWaiver = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -50,7 +53,7 @@ const Login = () => {
         const suffix = generateRandomString(5);
 
         const encryptedPassword = await encryptString(prefix + values.Password + suffix);
-        const resp = await getAccountLogin(values.UserName, encryptedPassword);
+        const resp = await getAccountLogin(values.UserName, encryptedPassword, "waiver");
         const responseObj = JSON.parse(resp ?? "{}");
 
         if (responseObj.status === 200 && responseObj?.data?.token) {
@@ -87,13 +90,38 @@ const Login = () => {
 
   return (
     <div className="bg">
+    
       <div className="loginmob">
-        <h1 className="text-center m-0 pt-4 heading">
-          महाराष्ट्र राज्य शेतकरी सहाय्य योजना
+        
+   <div className="d-flex justify-content-center align-items-center ps-2 pt-3 position-relative">
+         <div style={{position: "absolute", left: "10px"}}>
+          <a href="https://www.india.gov.in/" target="_blank" >
+             <img
+                  src={emblemLogo}
+                  alt=""
+                  className="enb"
+                  style={{ width: "40px" }}
+                />
+          </a>
+           
+                  <a href="https://www.maharashtra.gov.in" target="_blank" >
+                <img
+                  src={sg}
+                  alt=""
+                  className="sg ms-lg-1"
+                  style={{ width: "65px" }}
+                />
+                </a>
+         </div>
+               <div>
+                 <h1 className="text-center m-0 pt-4 heading">
+          शेतकरी कर्ज संकट निवारण योजना
         </h1>
-
+            <h3 className="text-center m-0 heading m-0 p-0">  महाराष्ट्र शासन</h3>
+               </div>
+        </div>
         <div className="auth-box mt-5">
-          <h2 className="my-4 mt-0">Login</h2>
+          <h2 className="my-4 mt-0">Login for Waiver Schemes</h2>
 
           <form onSubmit={formik.handleSubmit}>
             {/* Username */}
@@ -135,7 +163,7 @@ const Login = () => {
             </div>
 
             {/* Captcha */}
-            <div className="d-flex justify-content-between my-3">
+            <div className="d-flex justify-content-between my-3 captchatxtwrapp">
               <LoadCanvasTemplate />
               <input
                 type="text"
@@ -159,7 +187,7 @@ const Login = () => {
       </div>
 
       <div className="text-center copyrightlogin">
-        Copyright © 2025.
+         Copyright © 2025. Design and Developed By MAHAIT.
         <a href="https://mahait.org/" target="_blank" rel="noopener noreferrer">
           <img src={mahaitlogo} alt="MAHAIT Logo" className="mahaitlogo" />
         </a>
@@ -168,4 +196,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginWaiver;

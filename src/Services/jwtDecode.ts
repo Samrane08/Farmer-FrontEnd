@@ -6,6 +6,8 @@ interface TokenData {
   BankId: number;
   DistrictId: number;
   exp: number;
+  BankName: string;
+  UserName: string;
 }
 
 export const parseToken = (token: string): TokenData => {

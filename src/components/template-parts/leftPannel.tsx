@@ -167,7 +167,7 @@ const LeftPannel: React.FC<LeftPannelProps> = ({ isOpen, onToggle }) => {
     <>
       {isOpen && <div className="mask" onClick={() => onToggle(false)} />}
       <button
-        className="text-white hamburgertagg btn btn-warning btn-sm"
+        className="hamburgertagg btn btn-light btn-sm"
         onClick={() => onToggle(!isOpen)}
       >
         <i className="bi bi-list"></i>

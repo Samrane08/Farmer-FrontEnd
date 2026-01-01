@@ -861,14 +861,15 @@ export async function getApplicantPaymentStatus(bearerToken: string): Promise<st
   }
 };
 
-export async function getAccountLogin(username: string, password: string): Promise<string> {
+export async function getAccountLogin(username: string, password: string, scheme: string): Promise<string> {
 
   const deviceFingerprint = generateDeviceFingerprint();
 
   let model = {
     userName: username,
     password: password,
-    deviceFingerprint: deviceFingerprint
+    deviceFingerprint: deviceFingerprint,
+    SchemeName: scheme
   }
   let config = {
     method: 'post',

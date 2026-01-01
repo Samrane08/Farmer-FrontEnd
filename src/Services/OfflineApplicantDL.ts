@@ -46,8 +46,6 @@ export async function postOfflineExistingApplicant(filePath: string, aadharNo: a
     aadhaarData: aadharNo,
     FilePath: filePath,
   };
-  debugger;
-  console.log(initValues);
   const config: AxiosRequestConfig = {
     method: 'POST',
     url: `${globalURL}farmer-service/api/FarmerUpload/ExistingAadharData`,
@@ -220,6 +218,24 @@ export async function deleteOfflineExistingId(Id: any, hostelID: any, bearerToke
     return JSON.stringify(response);
   } catch (error) {
     console.error("Error delete aadhar aapplication:", error);
+    return JSON.stringify(error);
+  }
+}
+
+export async function DownloadIFSCCode(bearerToken: string): Promise<string> {
+  const config: AxiosRequestConfig = {
+    method: 'POST',
+    url: `${globalURL}fv_farmer-service/api/IFSCCode/downloadIFSCCode`,
+    headers: {
+      'Authorization': `Bearer ${bearerToken}`,
+    }
+  };
+
+  try {
+    const response: AxiosResponse = await axios.request(config);
+    return JSON.stringify(response);
+  } catch (error) {
+    console.error('Error fetching search application:', error);
     return JSON.stringify(error);
   }
 }

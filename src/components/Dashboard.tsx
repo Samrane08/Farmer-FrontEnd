@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { useSelector } from "react-redux";
 import { parseToken } from "../Services/jwtDecode";
 import { RootState } from "../store/index";
+import { apiCall, buildQueryParams } from "../Services/api";
+import { getDashboardData } from "../Services/apiEndPoint";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const StatCard: React.FC<{
   title: string;
@@ -18,13 +22,13 @@ const StatCard: React.FC<{
 
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <i className="bi bi-currency-rupee"></i>
             {iconRight && (
               <i
                 className={iconRight}
-                style={{ marginLeft: "-12px", fontSize: "2rem" }}
+
               ></i>
             )}
+            {/* style={{ marginLeft: "-12px", fontSize: "2rem" }} */}
           </div>
           <h2 className="card-text">{value}</h2>
         </div>
@@ -34,49 +38,117 @@ const StatCard: React.FC<{
 );
 
 const Dashboard: React.FC = () => {
-  const token = useSelector((state: RootState) => state.authenticate.token);
+  const navigate = useNavigate();
+  const bearerToken = useSelector((state: RootState) => state.authenticate.token);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<any>([]);
 
-  let fullName = "N/A";
-  let roleId = 0;
-  let bankId = 0;
-  let districtId = 0;
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  if (token) {
+  const fetchData = async () => {
+    setIsLoading(true);
     try {
-      const decoded = parseToken(token);
-      fullName = decoded.Name;
-      roleId = decoded.RoleId;
-      bankId = decoded.BankId;
-      districtId = decoded.DistrictId;
-    } catch (err) {
-      console.error("Failed to decode token:", err);
+      const response = await apiCall<any>(`${getDashboardData}`, bearerToken, "GET");
+      if (response.status === 200) {
+        if (Array.isArray(response?.data?.Data) && response?.data?.Data?.length > 0)
+          setData(Array.isArray(response?.data?.Data) ? response?.data?.Data : []);
+      } else if (response.status === 401) {
+        toast("Unauthorized", { type: "error" });
+        navigate("/logout", { replace: true });
+      } else {
+        toast("Failed to load data", { type: "error" });
+      }
+    } catch {
+      toast("Some error occurred", { type: "error" });
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="container-fluid">
-      <div className="text-center mt-3">
+    <>
+      {isLoading && (
+        <>
+          {" "}
+          <div className="loader">
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </>
+      )}
+      <div className="container-fluid">
+        {/* <div className="text-center mt-3">
         <h3>
           Test (delete later): FullName: {fullName} | RoleId: {roleId} | BankId: {bankId} | DistrictId: {districtId}
         </h3>
-      </div>
+      </div> */}
 
-      <div className="row justify-content-center align-items-center mt-3">
-        <StatCard title="Expected Loan Amount" value={54470} className="bggblue" />
-        <StatCard
-          title="Uploaded Loan Amount"
-          value={54145}
-          className="bggreen"
-          iconRight="bi bi-cloud-upload-fill"
-        />
-        <StatCard
-          title="Pending Loan Amount"
-          value={325}
-          className="bggorange"
-          iconRight="bi bi-hourglass-top"
-        />
+        <div className="row justify-content-center align-items-center mt-3">
+          <StatCard title="Expected Loan Acounts" value={data[0]?.EstLoanAccounts} className="bggblue" />
+          <StatCard
+            title="Uploaded Loan Acounts"
+            value={data[0]?.UploadedCount}
+            className="bggreen"
+            iconRight="bi bi-cloud-upload-fill"
+          />
+          <StatCard
+            title="Pending Loan Acounts"
+            value={data[0]?.EstLoanAccounts - data[0]?.UploadedCount}
+            className="bggorange"
+            iconRight="bi bi-hourglass-top"
+          />
+        </div>
+
+        <div className="row justify-content-start align-items-center mt-3">
+          <div className="col-12 col-md-4 mb-4">
+            <div className="card bggyellow">
+              <div className="card-body">
+                <h5 className="card-title">Demographics Accounts</h5>
+
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    {/* <i className="bi bi-currency-rupee"></i> */}
+                    <i className="bi bi-pie-chart-fill"></i>
+
+
+                  </div>
+                  <h2 className="card-text">{data[0]?.DemographicsAccounts}</h2>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div className="col-12 col-md-4 mb-4">
+            <div className="card bggcyan">
+              <div className="card-body">
+                <h5 className="card-title">Non-Demographics Accounts</h5>
+
+                <div className="d-flex justify-content-between align-items-center">
+                  <div>
+                    {/* <i className="bi bi-currency-rupee"></i> */}
+                    <i className="bi bi-pie-chart-fill"></i>
+                    <i
+                      className="bi bi-x-circle"
+                      style={{ marginLeft: "2px", fontSize: "1rem" }}
+                    ></i>
+
+                  </div>
+                  <h2 className="card-text">{data[0]?.NonDemographicsAccounts}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

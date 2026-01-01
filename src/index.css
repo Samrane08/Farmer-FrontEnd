@@ -19,8 +19,6 @@
 
 }
 
-
-
 /* Custom scrollbar for sidebar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -69,13 +67,30 @@
     border-radius: 20px;
     padding: 1.5rem;
     margin: auto;
-    background: #fff;
-    min-width: 320px;
-    max-width: 360px;
-    border: 1px solid #4d6649;
+    /* translucent / frosted look */
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    min-width: 300px;
+    max-width: 380px;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 10px 30px rgba(8, 20, 30, 0.35);
+    color: #0b1a2a;
 }
+
+.auth-box h2 {
+    color: var(--mainColor);
+    margin-bottom: 1rem;
+}
+
+/* Card appearance when placed on vibrant background */
+.auth-box .small {
+    color: rgba(11, 26, 42, 0.8);
+} 
 .heading{
   color: #fff;
+      text-shadow: 1px 1px #000;
+    font-weight: 900;
 }
 
  .card {
@@ -120,6 +135,8 @@
  }
  .headers{
     background-color: #4f684b;
+    background-color: #2fa57d;
+    background-color: #7dba64;
     padding: 10px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     color: #fff
@@ -148,9 +165,9 @@ body .form-label {
     color: #fff;
     width: 100%;
     padding-left: 15px;
-    border-top: 1px solid #3c9f35;
+    border-top: 1px solid #6cae50;
     padding-top: 4px;
-    background-color: #3c9f35;
+    background-color: #6cae50;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -236,6 +253,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
    background-color: #fff;
+   background-color: #e8e8e8;
 }
 
 /* .btn-outline-warning {
@@ -283,6 +301,41 @@ body {
   --bs-btn-disabled-bg: #689F38;
   --bs-btn-disabled-border-color: #689F38;
 }
+
+/* Custom Waiver/Incentive button styles */
+.btn-waiver {
+    background: linear-gradient(180deg, #f07a4d 0%, #e2562e 100%);
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 20px rgba(226, 86, 46, 0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn-waiver:hover{
+    filter: brightness(1.04);
+    transform: translateY(-2px);
+}
+
+.btn-incentive{
+    background: linear-gradient(180deg, #8bc34a 0%, #4caf50 100%);
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn-incentive:hover{
+    filter: brightness(1.03);
+    transform: translateY(-2px);
+}
+
+/* Button content tweaks */
+.auth-box .btn .fs-4{font-size: 1.25rem}
+.auth-box .btn small{opacity: 0.95; color: rgba(255,255,255,0.95)}
+.auth-box .btn .fw-bold{font-size: 1rem}
+
 .loginmob{
   height: calc(100vh - 43px);
 }
@@ -293,7 +346,7 @@ body {
   text-align: justify;
 }
 .bg{
-   background-image: url(./Images/bggreen01.jpg) ; 
+   background-image: url(./Images/bggreen3.jpg) ; 
     background-repeat: no-repeat;
      background-size: cover; 
     height: 100vh;
@@ -321,6 +374,11 @@ body {
   width: 100%;
   height: 60px;
   z-index: 5;
+}
+.loginmob svg {
+    position: absolute;
+    right: 9px;
+    top: 10px;
 }
 .vjnt{
   font-size: 2.5rem;
@@ -564,7 +622,7 @@ textarea.form-control{
   font-style: normal;
 }
 
-.copyrightlogin {
+/* .copyrightlogin {
     color: #ffffff;
     width: 100%;
     padding-left: 15px;
@@ -574,7 +632,7 @@ textarea.form-control{
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
+} */
 
 img.mahaitlogo {
     width: 38px;
@@ -679,10 +737,13 @@ header.border-bottom .bg {
 }
 
 .hamburgertagg{
+  cursor: pointer;
     position: absolute;
     z-index: 5;
     top: 7px;
     left: 275px;
+    top: 26px;
+    left: 12px;
 }
 .hamburgertag .hamburger-react div {
     background: #fff !important;
@@ -718,6 +779,8 @@ header.border-bottom .bg {
 .sidebar li a.nav-link:hover {
 background: #3f8cdf;
     color: #fff !important;
+        background: #e0fad5;
+    color: #1e5e04 !important;
 }
 
 .sidebar li a .icon {
@@ -799,6 +862,10 @@ background: #3f8cdf;
         background-color: #3ed6a3 !important;
     color: #ffffff !important;
     border-left: 3px solid #098259;
+
+    background-color: #e0fad5 !important;
+    color: #1e5e04 !important;
+    border-left: 3px solid #305122;
 }
 
 /* Highlight parent menus (soft) */
@@ -806,6 +873,10 @@ background: #3f8cdf;
      background-color: #c1dbf9;
     border-left: 3px solid #3f8cdf;
     border-color: #3f8cdf;
+
+        background-color: #e0fad5;
+    border-left: 3px solid #305122;
+    border-color: #305122;
 }
 
 /* Hover effect
@@ -845,7 +916,7 @@ background: #3f8cdf;
 }
 
 .form-group {
-  margin: 0px 0 10px 0  !important;
+  margin: 0px 0 18px 0  !important;
 }
 
 .form-group .text-danger{
@@ -1152,10 +1223,28 @@ fieldset.formApllication.strip:nth-child(even) {
   background-color: #F7D162;
   color: #fff;
 }
+.bggyellow h2{
+  color: #fff;
+  font-size: 2.5rem;
+}
+.bggyellow .bi{
+  color: #fff;
+  font-size: 2.8rem;
+  line-height: 1;
+}
 .bggcyan{
   background-color: #74D1E4;
   color: #fff;
 } 
+.bggcyan h2{
+  color: #fff;
+  font-size: 2.5rem;
+}
+.bggcyan .bi{
+  color: #fff;
+  font-size: 2.8rem;
+  line-height: 1;
+}
 .bggpurple{
   background-color: #D3AAF6;
   color: #fff;
@@ -2787,3 +2876,44 @@ body .nav-tabs{
     }
 }
 
+/*Custom Modal Popup CSS - Upto Suresh*/
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal-container {
+    background: #fff;
+    width: 600px;
+    max-height: 80vh;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.validation-message {
+    white-space: pre-wrap;        /* preserve new lines */
+    word-break: normal;           /* DO NOT break words */
+    overflow-wrap: break-word;    /* wrap ONLY if needed */
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+
+.modal-footer {
+    text-align: right;
+}
