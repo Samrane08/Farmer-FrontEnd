@@ -252,6 +252,9 @@ const DeleteUploadedBankData: React.FC = () => {
             # The uploaded loan accounts can be deleted up to 72 hours after uploaded
             and then upload again.
           </div>
+          <div>
+            # Kindly tick checkboxes to Delete data.
+          </div>
 
           <div className="mt-2 flex align-items-center">
             <span
@@ -311,7 +314,8 @@ const DeleteUploadedBankData: React.FC = () => {
               value={selectedOption}
               onChange={(e) => setSelectedOption(e.target.value)}
             >
-              <option value="Aadhar Number">Aadhar Number</option>
+              <option value="">Select Option</option>
+              <option value="Aadhar Number">Aadhaar Number</option>
               <option value="Loan Account Number">Loan Account Number</option>
               <option value="Saving Account Number">Saving Account Number</option>
             </select>

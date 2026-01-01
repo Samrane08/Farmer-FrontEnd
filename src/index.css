@@ -67,11 +67,26 @@
     border-radius: 20px;
     padding: 1.5rem;
     margin: auto;
-    background: #fff;
-    min-width: 320px;
-    max-width: 360px;
-    border: 1px solid #4d6649;
+    /* translucent / frosted look */
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    min-width: 300px;
+    max-width: 380px;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 10px 30px rgba(8, 20, 30, 0.35);
+    color: #0b1a2a;
 }
+
+.auth-box h2 {
+    color: var(--mainColor);
+    margin-bottom: 1rem;
+}
+
+/* Card appearance when placed on vibrant background */
+.auth-box .small {
+    color: rgba(11, 26, 42, 0.8);
+} 
 .heading{
   color: #fff;
       text-shadow: 1px 1px #000;
@@ -286,6 +301,41 @@ body {
   --bs-btn-disabled-bg: #689F38;
   --bs-btn-disabled-border-color: #689F38;
 }
+
+/* Custom Waiver/Incentive button styles */
+.btn-waiver {
+    background: linear-gradient(180deg, #f07a4d 0%, #e2562e 100%);
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 20px rgba(226, 86, 46, 0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn-waiver:hover{
+    filter: brightness(1.04);
+    transform: translateY(-2px);
+}
+
+.btn-incentive{
+    background: linear-gradient(180deg, #8bc34a 0%, #4caf50 100%);
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+.btn-incentive:hover{
+    filter: brightness(1.03);
+    transform: translateY(-2px);
+}
+
+/* Button content tweaks */
+.auth-box .btn .fs-4{font-size: 1.25rem}
+.auth-box .btn small{opacity: 0.95; color: rgba(255,255,255,0.95)}
+.auth-box .btn .fw-bold{font-size: 1rem}
+
 .loginmob{
   height: calc(100vh - 43px);
 }

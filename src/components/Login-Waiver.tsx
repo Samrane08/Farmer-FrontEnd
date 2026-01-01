@@ -23,7 +23,7 @@ const portalLoginSchema = Yup.object().shape({
   Password: Yup.string().required("Password is required"),
 });
 
-const Login = () => {
+const LoginWaiver = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const Login = () => {
         const suffix = generateRandomString(5);
 
         const encryptedPassword = await encryptString(prefix + values.Password + suffix);
-        const resp = await getAccountLogin(values.UserName, encryptedPassword);
+        const resp = await getAccountLogin(values.UserName, encryptedPassword, "waiver");
         const responseObj = JSON.parse(resp ?? "{}");
 
         if (responseObj.status === 200 && responseObj?.data?.token) {
@@ -121,7 +121,7 @@ const Login = () => {
                </div>
         </div>
         <div className="auth-box mt-5">
-          <h2 className="my-4 mt-0">Login</h2>
+          <h2 className="my-4 mt-0">Login for Waiver Schemes</h2>
 
           <form onSubmit={formik.handleSubmit}>
             {/* Username */}
@@ -196,4 +196,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginWaiver;
