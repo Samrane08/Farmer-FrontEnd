@@ -17,6 +17,8 @@
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@types/react-router-dom": "^5.3.3",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
     "antd": "^5.19.1",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
