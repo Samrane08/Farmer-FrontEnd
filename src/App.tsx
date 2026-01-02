@@ -9,7 +9,6 @@ import Dashboard from "./components/Dashboard";
 
 import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
-import UploadFarmerData from "./components/UploadBankData";
 import DeletedDataDashboard from "./components/DeletedDataDashboard";
 import DeleteUploadedBankData from "./components/DeleteUploadBankData";
 import FormerUploadedBankData from "./components/FormerUploadedBank";
@@ -18,6 +17,7 @@ import DownloadAllActiveData from "./components/DownloadAllActiveData";
 import Landing from "./pages/LandingPage";
 import LoginWaiver from "./components/Login-Waiver";
 import LoginIncentive from "./components/Login-Incentive";
+import DownloadNonDemographicData from "./components/DownloadNonDemographicData";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +109,16 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <ApplicantLayout>
               <DownloadAllActiveData />
+            </ApplicantLayout>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/report-amount",
+        element: (
+          <ProtectedRoute>
+            <ApplicantLayout>
+              <DownloadNonDemographicData />
             </ApplicantLayout>
           </ProtectedRoute>
         ),

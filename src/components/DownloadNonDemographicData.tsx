@@ -1,0 +1,189 @@
+import React, { useEffect, useMemo, useState } from "react";
+import Header from "./Header";
+import { useSelector } from "react-redux";
+import { parseToken } from "../Services/jwtDecode";
+import { RootState } from "../store/index";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { apiCall, buildQueryParams } from "../Services/api";
+import { downloadNonDemographicFiles, getNonDemographicDataApi } from "../Services/apiEndPoint";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+
+
+
+const DownloadNonDemographicData: React.FC = () => {
+  const bearerToken = useSelector((state: RootState) => state.authenticate.token);
+  let fullName = "N/A";
+  let roleId = 0;
+  let bankId = 0;
+  let districtId = 0;
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState<Record<string, any>[]>([]);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const hiddenColumns = ["BRID", "BankId"];
+  const sortableColumns = ["BranchName", "IFSCCode", "LoanHolderName"];
+  const [first, setFirst] = useState(0);
+
+
+  if (bearerToken) {
+    try {
+      const decoded = parseToken(bearerToken);
+      fullName = decoded.Name;
+      roleId = decoded.RoleId;
+      bankId = decoded.BankId;
+      districtId = decoded.DistrictId;
+    } catch (err) {
+      console.error("Failed to decode token:", err);
+    }
+  }
+
+  useEffect(() => {
+    getNonDemographicData();
+  }, [pageNo, pageSize]);
+  const getNonDemographicData = async () => {
+    
+    setIsLoading(true);
+    setLoading(true);
+    try {
+      const params = {
+        pageNo: 1,
+        pageSize: 20,
+      };
+      const query = buildQueryParams(params);
+      const response = await apiCall<any>(`${getNonDemographicDataApi}?${query}`, bearerToken, "GET");
+      if (response.status === 200) {
+        debugger;
+        toast(response.data.Message, { type: "error", position: "top-center" });
+        setRows(Array.isArray(response.data.Data) ? response.data.Data : []);
+        setTotalCount(response.data.Data.Lenght ?? 0);
+      } else if (response.status === 401) {
+        toast(response.data.Message, { type: "error" });
+        navigate("/logout", { replace: true });
+      } else {
+        toast(response.data.Message, { type: "error" });
+      }
+    } catch {
+      toast("Some Error occurred", { type: "error", position: "top-right" });
+    } finally {
+      setLoading(false);
+      setIsLoading(false);
+    }
+    // Implement the logic to fetch deleted bank data
+  }
+
+  const dynamicColumns = useMemo(() => {
+    if (!rows.length) return [];
+    return Object.keys(rows[0])
+      .filter((col) => !hiddenColumns.includes(col))
+      .map((col) => ({
+        field: col,
+        header: col.replace(/_/g, " "),
+        sortable: sortableColumns.includes(col)
+      }));
+  }, [rows]);
+  const bodyTemplate = (rowData: any, column: any) => {
+    const value = rowData[column.field];
+    return value !== null && value !== undefined ? value : "-";
+  };
+
+  const onPageChange = (event: any) => {
+    setFirst(event.first);
+    setPageNo(event.page + 1); // API expects 1-based page
+    setPageSize(event.rows); // ✅ user-selected page size
+  };
+  useEffect(() => {
+    setPageNo(1);
+    setFirst(0);
+  }, [pageSize]);
+
+
+  const downloadFiles = async () => {
+    setLoading(true);
+    setIsLoading(true);
+    try {
+      const res = await apiCall<any>(downloadNonDemographicFiles, bearerToken, "GET", undefined, "blob");
+      if (res.isBlob && res.data instanceof Blob) {
+        const url = window.URL.createObjectURL(res.data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "DeletedBankData.zip";
+        link.click();
+        window.URL.revokeObjectURL(url);
+      }
+    } catch {
+      toast("Some Error occurred", { type: "error", position: "top-right" });
+    } finally {
+      setIsLoading(false);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {isLoading && (
+        <>
+          {" "}
+          <div className="loader">
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
+        </>
+      )}
+      <div className="application-preview form">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="mb-0">Download Non-Demographics Data</h5>
+
+          <Button
+            label="Download CSV"
+            icon="pi pi-download"
+            className="p-button-success"
+            onClick={downloadFiles}
+            disabled={loading || totalCount === 0}
+          />
+        </div>
+        {/* <h5 className="mb-3">Uploaded Bank Data</h5> */}
+        <DataTable
+          value={rows}
+          loading={loading}
+          paginator
+          lazy
+          first={first}
+          rows={pageSize}
+          totalRecords={totalCount}
+          onPage={onPageChange}
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          scrollable
+          scrollHeight="600px"
+          stripedRows
+          showGridlines
+          emptyMessage="No records found"
+        >
+          {dynamicColumns.map((col) => (
+            <Column
+              key={col.field}
+              field={col.field}
+              header={col.header}
+              sortable={col.sortable}
+              body={bodyTemplate}
+            />
+          ))}
+
+        </DataTable>
+      </div>
+    </>
+
+  );
+};
+export default DownloadNonDemographicData;

@@ -23,3 +23,7 @@ export const getActiveData = "fv_farmer-service/api/DownloadActiveData/GetActive
 
 //DashBoard
 export const getDashboardData = "fv_farmer-service/api/Dashboard";
+
+// Download-Non Demographic Data
+export const getNonDemographicDataApi = "fv_farmer-service/api/FarmerUpload/GetAadharNAData";
+export const downloadNonDemographicFiles = "fv_farmer-service/api/FarmerDelete/dynamic-excel-deleted";
