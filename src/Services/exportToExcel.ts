@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import 'jspdf-autotable';
 
 export const exportToExcel = (data: any[], fileName: string, Heading: any) => {
   //Had to create a new workbook and then add the header
@@ -61,7 +61,7 @@ export const exportToPDF = (
     };
   });
 
-  autoTable(doc, {
+  (doc as any).autoTable({
     startY: 50,
     head: Headers,
     body: rows,
